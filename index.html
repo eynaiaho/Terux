@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en" color-theme="tn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terux</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root[color-theme="tn"] {
+            --background-main: #1a1b26;
+            --background-darker: #16161e;
+            --background-lighter: #1f2335;
+            --border: #24283b;
+
+            --text: #a9b1d6;
+            --success: #9ece6a;
+            --accent: #7aa2f7;
+            --error: #f7768e;
+            --cursor-color: #bb9af7;
+            --muted-text: color-mix(in srgb, var(--text), transparent 50%);
+        }
+    </style>
+
+    <style>
+        .xterm-viewport {
+            background-color: var(--background-darker) !important;
+        }
+
+        .xterm-viewport::-webkit-scrollbar {
+            background-color: var(--background-lighter);
+        }
+
+        @media (max-height: 250px) and (min-height: 100px) {
+            .body-head * {
+                display: none;
+            }
+        }
+
+
+        .inter-main {
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            letter-spacing: -0.02em;
+        }
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            letter-spacing: -0.02em;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .terminal {
+            background: var(--background-main);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .navbar {
+            background: var(--background-darker);
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            height: 40px;
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--border);
+
+            box-shadow: 5px 5px 50px 5px rgba(154, 37, 196, 0.05);
+        }
+
+        .navbar-touch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 40px;
+            width: calc(100% - 120px);
+            z-index: 999;
+        }
+
+        .navbar-left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-shrink: 0;
+            max-height: 40px;
+            user-select: none;
+        }
+
+        .navbar-left-logo img {
+            height: 20px;
+            width: auto;
+            margin-left: 5px;
+        }
+
+        .navbar-left-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-center {
+            display: flex;
+            align-items: center;
+            max-height: 40px;
+        }
+
+        .navbar-center-progress {
+            color: var(--muted-text);
+            user-select: none;
+            opacity: 0.5;
+        }
+
+        .navbar-right {
+            display: flex;
+            flex-direction: row;
+            user-select: none;
+            align-items: stretch;
+            height: 40px;
+        }
+
+        .navbar-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .navbar-button svg {
+            shape-rendering: geometricPrecision;
+        }
+
+        .navbar-button:hover {
+            background: var(--background-lighter);
+            filter: brightness(1.2);
+        }
+
+        .navbar-right-exit:hover {
+            background: var(--error);
+            filter: brightness(0.9);
+        }
+
+        .body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 0.5em;
+            margin-left: 10px;
+            max-height: calc(100vh - 60px - 0.5em);
+            min-height: 0;
+        }
+
+        .body-head {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .body-left {
+            display: flex;
+            flex-direction: row;
+
+            overflow: hidden;
+            width: 100%;
+            flex: 1;
+        }
+
+        .body-plus {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 10px;
+            background: transparent;
+        }
+
+        .body-plus svg {
+            background: transparent;
+            cursor: pointer;
+            color: var(--text);
+            transition: 0.2s;
+        }
+
+        .body-plus svg:hover {
+            filter: brightness(1.5);
+        }
+
+        .body-tabs {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+            min-width: 0;
+            flex: 1;
+        }
+
+        .body-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .body-tab {
+            background: transparent;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 0.2em;
+            padding: 10px;
+            margin-right: 0;
+            margin-left: 10px;
+            border-radius: 10px 10px 0 0;
+            user-select: none;
+            cursor: pointer;
+
+            flex-shrink: 0;
+
+            min-width: 190px;
+
+            position: relative;
+        }
+
+        .body-tabs .body-tab:first-child {
+            margin-left: 0;
+        }
+
+        .body-tab:not([active]):hover {
+            background: var(--background-lighter);
+        }
+
+        .body-tab[active] {
+            background: var(--background-darker);
+            font-weight: bold;
+        }
+
+        .body-tab[active]::before {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            bottom: 0;
+            left: -15px;
+            background: radial-gradient(circle at 0 0,
+                    transparent 15px,
+                    var(--background-darker) 15.5px);
+        }
+
+        .body-tab[active]::after {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            bottom: 0;
+            right: -15px;
+            background: radial-gradient(circle at 100% 0,
+                    transparent 15px,
+                    var(--background-darker) 15.5px);
+        }
+
+        .body-tabs .body-tab:first-child:before {
+            background: transparent;
+        }
+
+        .body-tab-close {
+            display: flex;
+            align-items: center;
+            margin: 0 5px;
+        }
+
+        .body-navs {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .body-navs-settings {
+            height: 100%;
+            margin: 0 0.4em;
+        }
+        
+        .body-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .body-navs-settings svg,
+        .body-navs-ai svg {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: filter 0.3s, transform 0.7s ease-in-out;
+        }
+
+        .body-navs-settings svg:hover {
+            filter: brightness(1.2);
+            transform: rotate(90deg);
+            filter: drop-shadow(0 0 0.75rem var(--cursor-color));
+        }
+
+        .body-navs-ai svg:hover {
+            filter: brightness(1.2);
+            filter: drop-shadow(0 0 0.75rem var(--cursor-color));
+        }
+
+
+
+        .body-main {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .body-main-terminal {
+            background: var(--background-darker);
+            color: var(--text);
+            flex-grow: 1;
+            overflow: hidden;
+            min-height: 0;
+            position: relative;
+        }
+
+        .body-main-terminal #terminal {
+            position: absolute;
+            top: 0.5em;
+            left: 0.5em;
+            bottom: 0.5em;
+            right: 0.5em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="terminal">
+        <!-- TERMINAL HEAD -->
+        <div class="navbar">
+            <div class="navbar-touch" data-tauri-drag-region>
+
+            </div>
+            <div class="navbar-left">
+                <div class="navbar-left-logo">
+                    <img src="../icons/terux_mini.png" alt="Terux Icon">
+                </div>
+                <div class="navbar-left-title">Terux</div>
+            </div>
+            <div class="navbar-center">
+                <div class="navbar-center-progress">$> Progressing - Smart Terminal</div>
+            </div>
+            <div class="navbar-right">
+                <div class="navbar-right-hide navbar-button">
+                    <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                        <line x1="4" y1="12" x2="20" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="navbar-right-screen navbar-button">
+                    <svg width="14" height="14" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="16" height="16" x="4" y="4" rx="1.5"></rect>
+                    </svg>
+                </div>
+                <div class="navbar-right-exit navbar-button">
+                    <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <!-- TERMINAL BODY --> <!--BURADA KALDIN!!!-->
+        <div class="body">
+            <div class="body-head">
+                <div class="body-left">
+                    <div style="display: flex;flex-direction: row;min-width: 0;">
+                        <div class="body-tabs">
+
+                        </div>
+                        <div class="body-plus" id="addTab">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5V19M5 12H19" stroke="currentColor" style="color: var(--text);"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="body-navs">
+                    <div class="body-navs-ai body-nav">
+                        <svg xmlns="http://w3.org" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)">
+                            <path d="M13 10h7l-9 13v-9H4l9-13z" />
+                        </svg>
+                    </div>
+                    <div class="body-navs-settings body-nav">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="var(--accent)">
+                            <path
+                                d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.39-.29-.61-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.26-.25-.45-.5-.45h-3.76c-.25 0-.46.19-.5.45l-.36 2.54c-.59.24-1.12.57-1.62.94l-2.39-.96c-.22-.08-.49 0-.61.22L2.73 8.87c-.11.2-.06.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.39.29.61.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.26.25.45.5.45h3.76c.25 0 .46-.19.5-.45l.36-2.54c.59-.24 1.12-.57 1.62-.94l2.39.96c.22.08.49 0 .61-.22l1.92-3.32c.11-.2.06-.47-.12-.61l-2.03-1.58zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="body-main">
+                <div class="body-main-terminal">
+                    <div id="terminal"></div>
+                </div>
+            </div>
+        </div>
+        <!-- TERMINAL FOOTER -->
+        <div class="footer">
+            <div class="footer-navs">
+
+            </div>
+        </div>
+    </div>
+    <script src="src/services.js" type="module"></script>
+    <script src="src/icons.ts" type="module"></script>
+    <script src="src/listeners.ts" type="module"></script>
+    <script src="src/tab.ts" type="module"></script>
+    <script src="src/main.ts" type="module"></script>
+    <script src="src/once.ts" type="module"></script>
+</body>
+
+</html>
