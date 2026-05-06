@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" color-theme="tn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="scroll.css">
+    <style>
+        :root[color-theme="tn"] {
+            --background-main: #1a1b26;
+            --background-darker: #16161e;
+            --background-lighter: #1f2335;
+            --border: #24283b;
+
+            --text: #a9b1d6;
+            --success: #9ece6a;
+            --accent: #7aa2f7;
+            --error: #f7768e;
+            --cursor-color: #bb9af7;
+            --muted-text: color-mix(in srgb, var(--text), transparent 50%);
+        }
+    </style>
+
+    <style>
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+            color: var(--muted-text);
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            letter-spacing: -0.02em;
+            user-select: none !important;
+        }
+
+        /* MAIN SCREEN */
+        .welcome {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            background: var(--background-main);
+        }
+
+        /* HEAD */
+        .head {
+            display: flex;
+            flex-direction: row;
+            justify-content: end;
+            width: 100%;
+            height: 40px;
+        }
+
+        .head-right {
+            color: var(--muted-text);
+            margin: 5px;
+        }
+
+        /* BODY */
+
+        .body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+        }
+
+        .body-content {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            max-width: 60vw;
+        }
+
+        .body-q {
+            display: none;
+            position: relative;
+        }
+
+        .body-q[active] {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .body-q button {
+            background: var(--border);
+            color: var(--text);
+            padding: 0.8em;
+            border: none;
+            border-radius: 7px;
+            margin: 10px 0;
+            width: 10em;
+            transition: filter 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .body-q button:hover {
+            filter: brightness(1.5);
+        }
+
+        .body-q button:active {
+            filter: brightness(2);
+        }
+
+        .body-q-form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .body-q-form input[type="button"] {
+            background: var(--background-lighter);
+            min-width: 10em;
+            padding: 0.8em;
+            margin: 5px 0;
+            border: none;
+            border-radius: 0.1em;
+            transition: 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .body-q-form input[type="text"] {
+            background-color: var(--background-lighter);
+            color: var(--text);
+            border: none;
+            border-radius: 7px;
+            padding: 10px;
+            width: 50vw;
+        }
+
+        input[type="text"]:hover {
+            outline: 1px solid var(--background-darker);
+        }
+
+        input[type="text"]:focus {
+            outline: 0.5px solid var(--accent);
+        }
+
+        .body-q-form input[type="button"]:hover {
+            filter: brightness(1.5);
+        }
+
+        .body-q-form #tn {
+            background-color: #1a1b26;
+            color: #a9b1d6;
+            border: #16161e solid 2px;
+        }
+
+        .body-q-form #n {
+            background-color: #2e3440;
+            color: #eceff4;
+        }
+
+        .body-q-form #g {
+            background-color: #282828;
+            color: #ebdbb2;
+        }
+
+        .body-q-form #sl {
+            background-color: #fdf6e3;
+            color: #657b83;
+        }
+
+        .body-q-form #sl:hover {
+            filter: brightness(0.9);
+        }
+
+        /* FOOTER */
+        .footer {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            height: 30px;
+        }
+
+        .footer-tip {
+            color: var(--accent);
+            padding: 0 5px;
+        }
+
+
+        .question-c {
+            position: absolute;
+            left: 0;
+            top: -1.5rem;
+        }
+
+        .question-title {
+            color: var(--text);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 0.2em 0;
+            text-align: center;
+        }
+
+        .question-description {
+            margin-bottom: 0.5em;
+            display: flex;
+            text-align: center;
+        }
+
+        progress {
+            appearance: none;
+            height: 0.2em;
+            width: 50vw;
+            position: absolute;
+            top: 10%;
+        }
+        progress::-webkit-progress-value {
+            background: var(--accent);
+            border-radius: 1em;
+            position: relative;
+        }
+        progress::-webkit-progress-bar {
+            background: var(--background-darker);
+            border-radius: 1em;
+        }
+        progress::-moz-progress-bar {
+            background: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="welcome">
+        <div class="head">
+            <div class="head-right" id="exit">X</div>
+        </div>
+        <div class="body">
+            <div class="body-content">
+                <progress value="0" max="100" id="progressBar"></progress>
+                <div class="body-icon">
+                    <img src="../../icons/terux.png" width="100" height="100" alt="Terux Icon">
+                </div>
+                <div class="body-q q1" data-q="1" active>
+                    <span>Thanks for using Terux! We got some questions for your privacy and user customization.</span>
+                    <button id="q1">Begin</button>
+                </div>
+                <div class="body-q q2" data-q="2">
+                    <span class="question-title">Who are you?</span>
+                    <span class="question-description">Enter your developer alias. This will be your identity in the
+                        terminal.</span>
+                    <div class="body-q-form">
+                        <label for="alias"></label>
+                        <input type="text" name="alias" id="alias" maxlength="15">
+                    </div>
+                    <button id="q2">Begin</button>
+                </div>
+                <div class="body-q q3" data-q="3" >
+                    <div class="question-title">Choose your vibe.</div>
+                    <span class="question-description">Select a color palette. You can always change this later in
+                        settings.</span>
+                    <div class="body-q-form theme" >
+                        <label for="tn"></label>
+                        <input type="button" value="Tokyo Night (Default)" name="tn" id="tn">
+
+                        <label for="n"></label>
+                        <input type="button" value="Nord" name="n" id="n">
+
+                        <label for="g"></label>
+                        <input type="button" value="Gruvbox" name="g" id="g">
+
+                        <label for="sl"></label>
+                        <input type="button" value="Solarized Light" name="sl" id="sl">
+                    </div>
+                    <button id="q3">Continue</button>
+                </div>
+                <div class="body-q q4" data-q="4">
+                    <span class="question-title">Pick your typography.</span>
+                    <span class="question-description">Choose a font that is easy on the eyes for those late-night
+                        coding sessions.</span>
+                    <div class="body-q-form font">
+                        <label for="jbm"></label>
+                        <input type="button" value="JetBrains Mono" name="jbm" id="jbm"
+                            style="font-family: 'JetBrains Mono';">
+
+                        <label for="fc"></label>
+                        <input type="button" value="Fira Code" name="fc" id="fc" style="font-family: 'Fira Code';">
+
+                        <label for="cc"></label>
+                        <input type="button" value="Cascadia Code" name="cc" id="cc"
+                            style="font-family: 'Cascadia Code';">
+                    </div>
+                    <button id="q4">Finish</button>
+                </div>
+                <div class="body-q q5" data-q="5">
+                    <span class="question-title">Help us improve Terux.</span>
+
+                    <span class="question-description">Send anonymous crash reports and basic usage stats. No
+                        personal
+                        data, keystrokes, or commands are ever collected.</span>
+                    <div style="display: flex;flex-direction: row; align-items: center; gap: 5px;">
+                        <label class="terux-toggle">
+                            <input type="checkbox" id="telemetryCheck">
+                            <span class="slider"></span>
+                        </label>
+                        <span>I agree</span>
+                    </div>
+
+                    <button id="q5">Begin</button>
+                </div>
+                <div class="body-q q6" data-q="0">
+                    <span class="question-description">Thanks for informations! You can start to use terminal</span>
+
+                    <button id="submit">Finish</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+    </div>
+
+    <script src="script.ts" type="module"></script>
+</body>
+
+</html>

@@ -96,5 +96,6 @@ document.querySelector(".navbar-right-screen")?.addEventListener("click", async 
 })
 
 document.querySelector(".navbar-right-exit")?.addEventListener("click", async () => {
-    await window.close();
+    const response = await invoke("send_user_data", {data: JSON.stringify({alias: "naberlo", a: "sgadgsd"})});
+    console.log(response)
 })
