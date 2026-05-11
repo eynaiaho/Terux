@@ -5,6 +5,8 @@ use tauri::{Manager, WebviewWindow};
 pub mod background;
 mod public;
 mod ui;
+mod commands;
+mod core;
 
 pub struct AppData {
     user_config: Mutex<background::config::UserConfig>,
@@ -21,6 +23,7 @@ async fn get_dir() -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() {
     let user_config_data = background::config::UserConfig::get_data();
+    core::pty_manager::start_terminal();
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![get_dir, public::send_user_data])

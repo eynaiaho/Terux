@@ -92,7 +92,7 @@ const getSubmits = (currentStage: string, nextStage: string): boolean => {
 }
 
 document.getElementById("exit")?.addEventListener("click", async () => {
-    await window.close();
+    await invoke("exit")
 })
 
 buttons.forEach(button => {
