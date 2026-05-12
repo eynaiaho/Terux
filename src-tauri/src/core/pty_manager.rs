@@ -1,31 +1,44 @@
-use conpty::Process;
-use std::process::Command;
-use std::io::{Read, Write};
+use portable_pty::{native_pty_system, CommandBuilder, PtySize, PtySystem}; // open_pty yerine openpty için trait eklendi
+use std::io::{stdin, stdout, Read, Write};
+use std::thread;
 use std::time::Duration;
-use tokio;
 
-pub async fn start_terminal() {
-    let mut cmd = Command::new("cmd.exe");
-    cmd.env("TERM", "xterm-256color");
+pub fn start_terminal() {
+    let pty_system = native_pty_system();
 
-    let mut process = Process::spawn(cmd).unwrap();
-    
-    let mut reader = process.output().unwrap();
-    let mut writer = process.input().unwrap();
+    let mut pair = pty_system
+        .openpty(PtySize {
+            rows: 24,
+            cols: 80,
+            pixel_width: 0,
+            pixel_height: 0,
+        })
+        .unwrap();
 
-    tokio::spawn(async move {
-        let mut buffer = [0u8; 8192];
-        while let Ok(n) = reader.read(&mut buffer) {
-            if n == 0 { break; }
-            print!("{}", String::from_utf8_lossy(&buffer[..n]));
-            let _ = std::io::stdout().flush();
+    let cmd = CommandBuilder::new("cmd.exe");
+    let _child = pair.slave.spawn_command(cmd).unwrap();
+
+    let mut reader = pair.master.try_clone_reader().unwrap();
+    let mut writer = pair.master.take_writer().unwrap();
+
+    thread::spawn(move || {
+        let mut buffer = [0u8; 4096];
+        let mut stdout = std::io::stdout();
+        loop {
+            match reader.read(&mut buffer) {
+                Ok(0) => break,
+                Ok(n) => {
+                    let _ = stdout.write_all(&buffer[..n]);
+                    let _ = stdout.flush();
+                }
+                Err(_) => break,
+            }
         }
     });
 
-    std::thread::sleep(Duration::from_secs(2));
-    
-    let _ = writer.write_all(b"dir\r\n");
-    let _ = writer.flush();
+    writeln!(&mut writer, "dir\r\n").unwrap();
 
-    std::thread::sleep(Duration::from_secs(4));
+    loop {
+        thread::park();
+    }
 }
