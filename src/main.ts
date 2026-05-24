@@ -9,11 +9,12 @@ import "@xterm/xterm/css/xterm.css";
 // tauri
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { listen } from "@tauri-apps/api/event";
 
 // other
 import { declarePanic } from "./services";
 
-
+let smartStatus: Boolean = false;
 
 const window = getCurrentWindow();
 
@@ -64,38 +65,72 @@ document.fonts.load('14px "JetBrains Mono"').then(async () => {
     fitAddon.fit();
 
     term.write("Terux Terminal is currently running...\r\n$>");
-})
+});
 
-term.onData(async (data) => {
-    if (data === '\r') {
-        const response = await invoke("get_dir");
-        myStorage = "";
-        term.write("\r\n" + response + "\r\n$>");
-    } if (data === "\x7f") {
-        myStorage = myStorage.slice(0, -1);
-        term.write("\b \b");
-    } else {
-        myStorage += data;
-        term.write(data);
+const smartButton = document.getElementById("smartButton");
+
+document.getElementById("smartButton")?.addEventListener("click", () => {
+    smartMode(!smartStatus);
+});
+
+const smartMode = (status: Boolean) => {
+    smartStatus = status;
+    if(smartStatus && smartButton) {
+        smartButton.style.filter = "brightness(1.4)";
+    } else if(smartButton) {
+        smartButton.style.filter = "brightness(1)";
     }
+}
 
-})
+let aiInputBuffer = "";
+term.onData(async (data) => {
+    if (smartStatus) {
+        if (data === "\r") {
+            const query = aiInputBuffer;
+            aiInputBuffer = "";
+            smartMode(false);
+
+            term.write("\r\n\x1b[33m[AI Düşünüyor...]\x1b[0m\r\n");
+
+            const response = await invoke("ask_ai", { data: query });
+
+            await invoke("inject_str", { data: response });
+        } else if (data === "\x7F") {
+            if (aiInputBuffer.length > 0) {
+                aiInputBuffer = aiInputBuffer.slice(0, -1);
+                term.write("\b \b");
+            }
+        } else {
+            aiInputBuffer += data;
+            term.write(data);
+        }
+        return;
+    }
+    await invoke("inject_str", { data: data });
+});
+
+listen("bc-terminal-data", (data) => {
+    const payload = data?.payload;
+    if (typeof payload === "string") {
+        term.write(payload);
+    }
+});
 
 // listeners
 
 window.onResized(() => {
     fitAddon.fit();
-})
+});
 
 document.querySelector(".navbar-right-hide")?.addEventListener("click", async () => {
     await window.minimize();
-})
+});
 
 document.querySelector(".navbar-right-screen")?.addEventListener("click", async () => {
     await window.toggleMaximize();
-})
+});
 
 document.querySelector(".navbar-right-exit")?.addEventListener("click", async () => {
-    const response = await invoke("send_user_data", {data: JSON.stringify({alias: "naberlo", a: "sgadgsd"})});
+    const response = await invoke("send_user_data", { data: JSON.stringify({ alias: "naberlo", a: "sgadgsd" }) });
     console.log(response)
-})
+});

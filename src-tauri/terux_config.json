@@ -2,6 +2,11 @@
   "alias": "",
   "theme": "",
   "font": "",
+  "ai": {
+    "api": "",
+    "model": "",
+    "service": ""
+  },
   "telemetry": false,
   "onboarding_complete": false
 }

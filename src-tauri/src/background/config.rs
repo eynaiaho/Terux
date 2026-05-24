@@ -4,11 +4,19 @@ use serde::{Deserialize, Serialize};
 
 static _PATH_: &str = "terux_config.json";
 
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct Ai {
+    pub api: String,
+    pub model: String,
+    pub service: String
+}
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct UserConfig {
     pub alias: String,
     pub theme: String,
     pub font: String,
+    pub ai: Ai,
     pub telemetry: bool,
     pub onboarding_complete: bool
 }

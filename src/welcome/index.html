@@ -222,17 +222,26 @@
             position: absolute;
             top: 10%;
         }
+
         progress::-webkit-progress-value {
             background: var(--accent);
             border-radius: 1em;
             position: relative;
         }
+
         progress::-webkit-progress-bar {
             background: var(--background-darker);
             border-radius: 1em;
         }
+
         progress::-moz-progress-bar {
             background: var(--accent);
+        }
+        
+        .ai_s {
+            display: flex;
+            flex-direction: row;
+            gap: 2px;
         }
     </style>
 </head>
@@ -262,11 +271,11 @@
                     </div>
                     <button id="q2">Begin</button>
                 </div>
-                <div class="body-q q3" data-q="3" >
+                <div class="body-q q3" data-q="3">
                     <div class="question-title">Choose your vibe.</div>
                     <span class="question-description">Select a color palette. You can always change this later in
                         settings.</span>
-                    <div class="body-q-form theme" >
+                    <div class="body-q-form theme">
                         <label for="tn"></label>
                         <input type="button" value="Tokyo Night (Default)" name="tn" id="tn">
 
@@ -300,6 +309,33 @@
                     <button id="q4">Finish</button>
                 </div>
                 <div class="body-q q5" data-q="5">
+                    <span class="question-title">AI API</span>
+
+                    <span class="question-description">Enter the API of the AI you will be using.</span>
+                    <div style="display: flex;flex-direction: row; align-items: center; gap: 5px;">
+                        <div class="body-q-form ai_s">
+                            <label for="gemini"></label>
+                            <input type="button" value="Gemini" name="gemini" id="gemini" style="background: rgba(30, 30, 35, 0.65);color: #A67CFF;border: 1px solid #7A22FF;filter: brightness(0.5);">
+
+                            <label for="claude"></label>
+                            <input type="button" value="Claude" name="claude" id="claude" style="background: rgba(30, 30, 35, 0.65);color: #FF9E7D;border: 1px solid #D97757;">
+
+                            <label for="groq"></label>
+                            <input type="button" value="Groq" name="groq" id="groq" style="background: rgba(30, 30, 35, 0.65);color: #FF6B52;border: 1px solid #F55036;">
+
+                            <label for="deepseek"></label>
+                            <input type="button" value="DeepSeek" name="deepseek" id="deepseek" style="background: rgba(30, 30, 35, 0.65);color: #708DFF;border: 1px solid #4D6BFE;">
+                        </div>
+                    </div>
+                    <div class="body-q-form ai_input" style="gap: 5px;">
+                        <input type="text" value="AIza" id="aiApiInput">
+                        <input type="text" placeholder="gemini-3.1-flash-lite" id="aiModelInput">
+                        <input type="text" value="Gemini" id="aiServiceInput" readonly>
+                    </div>
+
+                    <button id="q5">Begin</button>
+                </div>
+                <div class="body-q q6" data-q="6">
                     <span class="question-title">Help us improve Terux.</span>
 
                     <span class="question-description">Send anonymous crash reports and basic usage stats. No
@@ -313,13 +349,14 @@
                         <span>I agree</span>
                     </div>
 
-                    <button id="q5">Begin</button>
+                    <button id="q6">Begin</button>
                 </div>
-                <div class="body-q q6" data-q="0">
+                <div class="body-q q7" data-q="7">
                     <span class="question-description">Thanks for informations! You can start to use terminal</span>
 
                     <button id="submit">Finish</button>
                 </div>
+                <span id="errorBox" style="background-color: darkred;color: white;font-weight: bold;padding: 10px;border-radius: 7px;text-align: center;display: none;"></span>
             </div>
         </div>
         <div class="footer">

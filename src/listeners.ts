@@ -8,6 +8,6 @@ const addTabListener = addListener("click", "#addTab", () => {
 addListener("wheel", ".body-tabs", (event) => {
     event.preventDefault();
     const element = findElement(".body-tabs");
-    if(!element) return;
+    if (!element) return;
     element.scrollLeft += (event as WheelEvent).deltaY;
 })
