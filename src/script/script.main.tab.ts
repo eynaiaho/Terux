@@ -1,5 +1,6 @@
-import { findElement, addListener, findElementAll, findTabIndex } from "./services";
-import { TAB_CLOSE_ICON_SVG } from "./icons";
+import { findElement, addListener, findElementAll } from "./script.main.utils";
+import { findTabIndex } from "./script.main.services";
+import { TAB_CLOSE_ICON_SVG } from "./script.main.icons";
 
 const tabsDOM = findElement(".body-tabs");
 
@@ -56,9 +57,9 @@ export const createTabDOM = (title: string, src: string) => {
             tabsIndex--;
 
             const targetElement = findElement(".body-tabs");
-            if(!targetElement || !targetElement.parentElement) return;
+            if (!targetElement || !targetElement.parentElement) return;
             const targetIndex = targetElement.children.length - 1;
-            
+
             focusTab(tabs[targetIndex]?.tab as number);
         }
     })
@@ -71,17 +72,17 @@ export const changeTabDOM = (id: number, newTitle?: string, newSrc?: string) => 
 
     if (newTitle) {
         const tabElementTitle = tabElement?.querySelector(".body-tab-title");
-        if(tabElementTitle) {
+        if (tabElementTitle) {
             tabElementTitle.textContent = newTitle;
         }
     }
-    if(newSrc) {
+    if (newSrc) {
         const tabElementSrc = tabElement?.querySelector(".body-tab-logo img") as HTMLImageElement;
-        if(tabElementSrc) {
+        if (tabElementSrc) {
             tabElementSrc.src = newSrc;
         }
     }
-    
+
 }
 
 export const focusTab = (id: number) => {

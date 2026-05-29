@@ -1,5 +1,3 @@
-import { tabs } from "./tab";
-
 export const addListener = (event: string, element: string | HTMLElement, handle: (ev: Event) => void, selectAll: boolean = false) => {
     if(element instanceof HTMLElement) {
         element.addEventListener(event, handle);
@@ -43,9 +41,4 @@ export const declarePanic = async (message: string = "", question: boolean = fal
         return;
     }
     alert(message);
-}
-
-export const findTabIndex = (id: number): number => {
-    const index = tabs.findIndex(i => i.tab === id);
-    return index;
 }

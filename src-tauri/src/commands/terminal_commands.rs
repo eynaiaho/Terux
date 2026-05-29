@@ -1,3 +1,4 @@
+use portable_pty::PtySize;
 use tauri::{command, State};
 use tokio::sync::oneshot::{self};
 
@@ -22,4 +23,14 @@ pub async fn ask_ai(state: State<'_, AppData>, data: String) -> Result<String, S
         Ok(data) => Ok(data),
         Err(_) => Err("hata".into()),
     }
+}
+
+#[command]
+pub async  fn resize_pty(state: State<'_, AppData>, cols: u16, rows: u16) -> Result<String, String> {
+    let raw_terminal = state.terminal.clone();
+    let mut terminal_key = raw_terminal.lock().await;
+    if let Some(ref mut terminal) = *terminal_key {
+        let _ = terminal.resize(PtySize { rows: rows, cols: cols, ..Default::default() });
+    }
+    Ok("slm".to_string())
 }

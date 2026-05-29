@@ -1,10 +1,10 @@
 use portable_pty::{native_pty_system, CommandBuilder, PtySize};
-use tauri::{AppHandle, Emitter};
-use tokio::sync::{mpsc::Receiver, mpsc::Sender};
+use tauri::{AppHandle, Emitter, Manager};
+use tokio::sync::{mpsc::{Receiver, Sender}};
 
-use std::io::Write;
+use std::{io::Write};
 
-use crate::AiAsk;
+use crate::{AiAsk, AppData};
 
 pub async fn start_terminal(
     mut rx: Receiver<String>,
@@ -12,6 +12,7 @@ pub async fn start_terminal(
     _tx_ai: Sender<AiAsk>,
     app: AppHandle,
 ) {
+    let app_handle = app.app_handle();
     let pty_system = native_pty_system();
 
     let pair = pty_system
@@ -28,6 +29,13 @@ pub async fn start_terminal(
 
     let mut reader = pair.master.try_clone_reader().unwrap();
     let mut writer = pair.master.take_writer().unwrap();
+    let terminal_master = pair.master;
+
+    {
+        let raw_terminal = app_handle.state::<AppData>().terminal.clone();
+        let mut terminal = raw_terminal.lock().await;
+        *terminal = Some(terminal_master);
+    }
 
     let mut reader_task = tokio::task::spawn_blocking(move || {
         let mut buffer = [0u8; 4096];

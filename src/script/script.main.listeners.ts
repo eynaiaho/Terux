@@ -1,5 +1,5 @@
-import { addListener, findElement } from "./services";
-import { addNewTab } from "./tab";
+import { addListener, findElement } from "./script.main.utils";
+import { addNewTab } from "./script.main.tab";
 
 const addTabListener = addListener("click", "#addTab", () => {
     addNewTab();

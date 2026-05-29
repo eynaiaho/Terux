@@ -12,7 +12,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { listen } from "@tauri-apps/api/event";
 
 // other
-import { declarePanic } from "./services";
+import { declarePanic } from "./script.main.utils";
 
 let smartStatus: Boolean = false;
 
@@ -75,12 +75,16 @@ document.getElementById("smartButton")?.addEventListener("click", () => {
 
 const smartMode = (status: Boolean) => {
     smartStatus = status;
-    if(smartStatus && smartButton) {
+    if (smartStatus && smartButton) {
         smartButton.style.filter = "brightness(1.4)";
-    } else if(smartButton) {
+    } else if (smartButton) {
         smartButton.style.filter = "brightness(1)";
     }
 }
+
+listen("ai_error", (data) => {
+    console.error(data)
+});
 
 let aiInputBuffer = "";
 term.onData(async (data) => {
@@ -90,11 +94,18 @@ term.onData(async (data) => {
             aiInputBuffer = "";
             smartMode(false);
 
-            term.write("\r\n\x1b[33m[AI Düşünüyor...]\x1b[0m\r\n");
+            term.write(`\x1b[${query.length}D\x1b[K`);
 
-            const response = await invoke("ask_ai", { data: query });
+            try {
+                term.write("\x1b[33m[AI Düşünüyor...]\x1b[0m");
+                const response = await invoke("ask_ai", { data: query });
+                term.write(`\x1b[17D\x1b[K`);
+                await invoke("inject_str", { data: `${response}` });
+            } catch (error) {
+                console.error(error);
+                term.write(`\x1b[17D\x1b[K\x1b[31m[Conflict Error | Shutdown the Terminal]\x1b[0m\r\n`);
+            }
 
-            await invoke("inject_str", { data: response });
         } else if (data === "\x7F") {
             if (aiInputBuffer.length > 0) {
                 aiInputBuffer = aiInputBuffer.slice(0, -1);
@@ -112,14 +123,22 @@ term.onData(async (data) => {
 listen("bc-terminal-data", (data) => {
     const payload = data?.payload;
     if (typeof payload === "string") {
+        if (payload.includes("\x1b[2J") || payload.includes("\x1b[H")) {
+            term.clear();
+        }
         term.write(payload);
     }
 });
 
 // listeners
 
-window.onResized(() => {
+window.onResized(async () => {
     fitAddon.fit();
+
+    await invoke('resize_pty', {
+        cols: term.cols,
+        rows: term.rows
+    });
 });
 
 document.querySelector(".navbar-right-hide")?.addEventListener("click", async () => {

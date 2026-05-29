@@ -1,7 +1,7 @@
 use llm::{
     builder::{LLMBackend, LLMBuilder}, chat::ChatMessage
 };
-use tauri::{AppHandle, Manager};
+use tauri::{AppHandle, Emitter, Manager};
 use std::{sync::Arc};
 use tokio::sync::Mutex;
 use tokio::sync::mpsc::{Receiver, Sender};
@@ -37,7 +37,7 @@ pub async fn start_ai(ai: Ai, mut rx_ai: Receiver<AiAsk>, _tx_ai: Sender<AiAsk>,
     while let Some(data) = rx_ai.recv().await {
         let messager_clone = messager.clone();
         let llm_clone = llm.clone();
-        let _app_clone = app.app_handle().clone();
+        let app_clone = app.app_handle().clone();
 
         tokio::spawn(async move {
             let message_content = {
@@ -54,7 +54,9 @@ pub async fn start_ai(ai: Ai, mut rx_ai: Receiver<AiAsk>, _tx_ai: Sender<AiAsk>,
                     }
                     let _ = data.reply_tx.send(string_message);
                 },
-                Err(_) => println!("b"),
+                Err(e) => {
+                    let _ = app_clone.emit("ai_error", format!("{:?}", e));
+                }
             }
         });
     }

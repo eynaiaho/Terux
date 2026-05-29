@@ -7,7 +7,7 @@ use crate::AppData;
 pub async fn send_user_data(state: tauri::State<'_, AppData>, handle: AppHandle, data: String) -> Result<bool, String> {
     let mut _config = state.user_config.lock().await;
     let my_data: config::UserConfig = serde_json::from_str(&data).unwrap();
-    my_data.save_data();
+    my_data.save_data(&handle);
     *_config = my_data;
     let main_window = handle.get_webview_window("main");
     let welcome_window = handle.get_webview_window("welcome");
@@ -23,6 +23,6 @@ pub async fn control_user<R: Runtime>(app: &AppHandle<R>) -> bool {
 }
 
 pub fn create_welcome_window<R: Runtime>(app: &AppHandle<R>) -> WebviewWindow<R> {
-    let webview_window = tauri::WebviewWindowBuilder::new(app, "welcome", tauri::WebviewUrl::App("../src/welcome/index.html".into())).inner_size(700.0, 600.0).center().decorations(false).build().unwrap();
+    let webview_window = tauri::WebviewWindowBuilder::new(app, "welcome", tauri::WebviewUrl::App("src/index.welcome.html".into())).inner_size(700.0, 600.0).center().decorations(false).build().unwrap();
     webview_window
 }

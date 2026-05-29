@@ -1,6 +1,8 @@
 use std::env;
-use tokio::sync::{mpsc, mpsc::Sender, Mutex};
 use std::sync::Arc;
+use portable_pty::MasterPty;
+use tokio::sync::{mpsc, mpsc::Sender, Mutex};
+use std::option::Option;
 
 use tauri::{Manager, WebviewWindow};
 
@@ -12,13 +14,14 @@ mod ui;
 
 pub struct AiAsk {
     pub query: String,
-    pub reply_tx: tokio::sync::oneshot::Sender<String>
+    pub reply_tx: tokio::sync::oneshot::Sender<String>,
 }
 
 pub struct AppData {
     user_config: Arc<Mutex<background::config::UserConfig>>,
     pipe_terminal_tx: Sender<String>,
     pipe_ai_tx: Sender<AiAsk>,
+    terminal: Arc<Mutex<Option<Box<dyn MasterPty + Send>>>>
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -28,27 +31,35 @@ pub async fn run() {
             public::send_user_data,
             commands::terminal_commands::inject_str,
             commands::terminal_commands::ask_ai,
+            commands::terminal_commands::resize_pty
         ])
         .setup(|app| {
             let handle = app.handle().clone();
 
             let (tx_terminal, rx_terminal) = mpsc::channel::<String>(100);
             let (tx_ai, rx_ai) = mpsc::channel::<AiAsk>(100);
-            
-            let user_config_data = background::config::UserConfig::get_data();
+
+            let user_config_data = background::config::UserConfig::get_data(&handle);
             let ai_data = user_config_data.ai.clone();
 
             app.manage(AppData {
                 user_config: Arc::new(Mutex::new(user_config_data)),
                 pipe_terminal_tx: tx_terminal.clone(),
                 pipe_ai_tx: tx_ai.clone(),
+                terminal: Arc::new(Mutex::new(None))
             });
 
             let pty_handle = handle.clone();
             let pty_tx_terminal = tx_terminal.clone();
             let pty_tx_ai = tx_ai.clone();
             tokio::spawn(async move {
-                core::pty_manager::start_terminal(rx_terminal, pty_tx_terminal, pty_tx_ai, pty_handle).await;
+                core::pty_manager::start_terminal(
+                    rx_terminal,
+                    pty_tx_terminal,
+                    pty_tx_ai,
+                    pty_handle,
+                )
+                .await;
             });
 
             let ai_handle = handle.clone();
@@ -71,7 +82,6 @@ pub async fn run() {
                     }
                 }
             });
-
             if cfg!(debug_assertions) {
                 app.handle().plugin(
                     tauri_plugin_log::Builder::default()
