@@ -13,7 +13,7 @@
     --muted-text: color-mix(in srgb, var(--text), transparent 50%);
 }
 :root[color-theme="n"] {
-    --background: #2e3440;
+    --background-main: #2e3440;
     --background-darker: #242933;
     --background-lighter: #3b4252;
     --border: #434c5e;
@@ -26,7 +26,7 @@
     --muted-text: color-mix(in srgb, var(--text), transparent 50%);
 }
 :root[color-theme="g"] {
-    --background: #282828;
+    --background-main: #282828;
     --background-darker: #1d2021;
     --background-lighter: #3c3836;
     --border: #32302f;
@@ -40,7 +40,7 @@
 }
 /* LIGHT */
 :root[color-theme="sl"] {
-    --background: #fdf6e3;
+    --background-main: #fdf6e3;
     --background-darker: #eee8d5;
     --background-lighter: #f5f0dc;
     --border: #d5cfba;

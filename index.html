@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" color-theme="tn">
+<html lang="en" color-theme="n">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terux</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="./src/style/fonts.css">
     <link rel="stylesheet" href="./src/style/colors.css">
     <link rel="stylesheet" href="./src/style/style.main.css">
+    <link rel="stylesheet" href="./src/style/settings.css">
+    <link rel="stylesheet" href="./src/style/style.scroll.css">
 </head>
 
 <body>
@@ -52,8 +50,8 @@
                 </div>
             </div>
         </div>
-        <!-- TERMINAL BODY --> <!--BURADA KALDIN!!!-->
-        <div class="body">
+        <!-- TERMINAL BODY -->
+        <div class="body menu" active>
             <div class="body-head">
                 <div class="body-left">
                     <div style="display: flex;flex-direction: row;min-width: 0;">
@@ -75,7 +73,7 @@
                             <path d="M13 10h7l-9 13v-9H4l9-13z" />
                         </svg>
                     </div>
-                    <div class="body-navs-settings body-nav">
+                    <div class="body-navs-settings body-nav" id="settingsButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="var(--accent)">
                             <path
@@ -91,18 +89,137 @@
             </div>
         </div>
         <!-- TERMINAL FOOTER -->
-        <div class="footer">
+        <div class="footer menu">
             <div class="footer-navs">
 
             </div>
         </div>
+        <div class="ai-div">
+            <div class="ai-center-div">
+                <div class="ai-input-div">
+                    <input type="text" class="ai-input" id="aiDataInput" placeholder="I need a help for command!">
+                    <button class="ai-button" id="aiDataButton">Submit</button>
+                </div>
+            </div>
+        </div>
+        <!-- TERMINAL SETTINGS -->
+        <div class="settings menu">
+            <div class="settings-body">
+                <div class="settings-c">
+                    <div class="settings-a">
+                        <div class="settings-button" id="settingsUser">User Settings</div>
+                        <div class="settings-button" id="settingsAI">AI Settings</div>
+                    </div>
+                    <div class="settings-b">
+                        <div class="settings-exit">
+                            <div class="settings-right-exit" id="exitSettings">
+                                <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M18 6 6 18"></path>
+                                    <path d="m6 6 12 12"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="settings-content-users settings-content" active>
+                            <div class="settings-content-div">
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editAlias"
+                                            class="settings-content-label">Your Alias</label></div>
+                                    <div class="settings-content-value"><input type="text"
+                                            class="settings-content-input settings-change" id="userAliasInput"></div>
+                                </div>
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editAlias"
+                                            class="settings-content-label">Your theme</label></div>
+                                    <div class="settings-content-value">
+                                        <div style="display:flex;flex-direction:row;gap: 0.5em;">
+                                            <button id="tn"
+                                                class="settings-theme-button settings-button-choice settings-change">Tokyo
+                                                Night</button>
+                                            <button id="n"
+                                                class="settings-theme-button settings-button-choice">Nord</button>
+                                            <button id="g"
+                                                class="settings-theme-button settings-button-choice">Gruvbox</button>
+                                            <button id="sl"
+                                                class="settings-theme-button settings-button-choice">Solarized
+                                                Light</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editAlias"
+                                            class="settings-content-label">Your font</label></div>
+                                    <div class="settings-content-value">
+                                        <div style="display:flex;flex-direction:row;gap: 0.5em;">
+                                            <button id="jbm" class="settings-font-button settings-button-choice"
+                                                style="font-family: 'JetBrains Mono';">JetBrains
+                                                Mono</button>
+                                            <button id="fc" class="settings-font-button settings-button-choice"
+                                                style="font-family: 'Fira Code';">Fira Code</button>
+                                            <button id="cc" class="settings-font-button settings-button-choice"
+                                                style="font-family: 'Cascadia Code';">Cascadia Code</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editAlias"
+                                            class="settings-content-label">telemetry</label></div>
+                                    <div class="settings-content-value">
+                                        <span>Disabled</span>
+                                        <label class="terux-toggle">
+                                            <input type="checkbox" id="telemetryCheckbox" class="settings-change">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span>Enabled</span>
+                                    </div>
+                                </div>
+                                <span style="margin: 10px 0;font-size: 12px;user-select: none;">
+                                    After saving critical settings such as alias, telemetry, API, model, and service,
+                                    restart the application.
+                                </span>
+                            </div>
+                        </div>
+                        <div class="settings-content-ai settings-content"> <!--BURADA KALDIN-->
+                            <div class="settings-content-div">
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editAPI"
+                                            class="settings-content-label">Your API</label></div>
+                                    <div class="settings-content-value"><input type="text"
+                                            class="settings-content-input settings-change" id="aiApiInput"
+                                            name="editAPI"></div>
+                                </div>
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editModel"
+                                            class="settings-content-label">Your Model</label></div>
+                                    <div class="settings-content-value"><input type="text"
+                                            class="settings-content-input settings-change" id="aiModelInput"
+                                            name="editModel"></div>
+                                </div>
+                                <div class="settings-content-div-key-value">
+                                    <div class="settings-content-key"><label for="editService"
+                                            class="settings-content-label">Your Service</label></div>
+                                    <div class="settings-content-value"><input type="text"
+                                            class="settings-content-input settings-change" id="aiServiceInput"
+                                            name="editService"></div>
+                                </div>
+                                <span style="margin: 10px 0;font-size: 12px;user-select: none;">
+                                    After saving critical settings such as alias, telemetry, API, model, and service,
+                                    restart the application.
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="settings-save-div" id="settingsSaveDiv">
+                            <button class="settings-save-button" id="settingsSubmit">Save the Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="./src/script/script.main.services.ts" type="module"></script>
-    <script src="./src/script/script.main.icons.ts" type="module"></script>
-    <script src="./src/script/script.main.listeners.ts" type="module"></script>
-    <script src="./src/script/script.main.terminal.ts" type="module"></script>
-    <script src="./src/script/script.main.once.ts" type="module"></script>
-    <script src="./src/script/script.main.tab.ts" type="module"></script>
+    <script src="./src/script/script.main.ts" type="module"></script>
 </body>
 
 </html>

@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Fira Code';
+    src: url('/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cascadia Code';
+    src: url('/fonts/Cascadia_Code/CascadiaCode-VariableFont_wght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+}

@@ -12,7 +12,7 @@ pub struct Ai {
     pub service: String,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct UserConfig {
     pub alias: String,
     pub theme: String,
@@ -20,6 +20,37 @@ pub struct UserConfig {
     pub ai: Ai,
     pub telemetry: bool,
     pub onboarding_complete: bool,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct ProgramConfig {
+    pub os: String,
+    pub cmd: Option<String>,
+}
+
+impl ProgramConfig {
+    pub fn detect() -> Self {
+        #[cfg(target_os = "windows")] {
+            Self {
+                os: String::from("windows"),
+                cmd: Some(String::from("powershell.exe")),
+            }
+        }
+
+        #[cfg(target_os = "linux")] {
+            Self {
+                os: String::from("linux"),
+                cmd: Some(String::from("bash")),
+            }
+        }
+
+        #[cfg(not(any(target_os = "windows", target_os = "linux")))] {
+            Self {
+                os: std::env::consts::OS.to_string(),
+                cmd: Some(String::from("sh"))
+            }
+        }
+    }
 }
 
 impl UserConfig {
@@ -43,8 +74,8 @@ impl UserConfig {
             file_data_json_object
         }
     }
-    pub fn save_data(&self, _handle: &AppHandle) {
-        let config = _handle.path().app_config_dir().unwrap();
+    pub fn save_data(&self, handle: &AppHandle) {
+        let config = handle.path().app_config_dir().unwrap();
 
         if !config.exists() {
             eprintln!("Klasör bulunamadı. | Uyumsuz: Önceden oluşturulması gerekiyordu.");

@@ -1,6 +1,6 @@
 import { findElement, addListener, findElementAll } from "./script.main.utils";
 import { findTabIndex } from "./script.main.services";
-import { TAB_CLOSE_ICON_SVG } from "./script.main.icons";
+import { TAB_CLOSE_ICON_SVG } from "./script.main.assets";
 
 const tabsDOM = findElement(".body-tabs");
 

@@ -1,8 +1,8 @@
 use portable_pty::{native_pty_system, CommandBuilder, PtySize};
 use tauri::{AppHandle, Emitter, Manager};
-use tokio::sync::{mpsc::{Receiver, Sender}};
+use tokio::sync::mpsc::{Receiver, Sender};
 
-use std::{io::Write};
+use std::io::Write;
 
 use crate::{AiAsk, AppData};
 
@@ -15,6 +15,15 @@ pub async fn start_terminal(
     let app_handle = app.app_handle();
     let pty_system = native_pty_system();
 
+    let state = app.state::<AppData>();
+    let alias = state.user_config.clone().lock().await.alias.clone();
+
+    let program_config_arc = state.program_config.clone();
+    let program_config = program_config_arc.lock().await;
+    let os = program_config.os.clone();
+    let current_cmd = program_config.cmd.clone();
+    drop(program_config);
+
     let pair = pty_system
         .openpty(PtySize {
             rows: 24,
@@ -24,7 +33,28 @@ pub async fn start_terminal(
         })
         .unwrap();
 
-    let cmd = CommandBuilder::new("cmd.exe");
+    let prompt_script = format!(
+        "Import-Module PSReadLine; function prompt {{ 'Terux${} ' + $pwd + '> ' }}",
+        alias
+    );
+
+    let cmd = if let Some(c) = current_cmd {
+        let mut program = CommandBuilder::new(c.clone());
+        if os == "windows" && c == "powershell.exe" {
+            program.args(&["-NoProfile", "-NoExit", "-Command", &prompt_script]);
+        } else if os == "windows" && c == "cmd.exe" {
+            program.env("PROMPT", format!("Terux$${alias} $P$G"));
+        } else if os == "linux" && c == "bash" {
+            program.env("PS1", format!("Terux${alias} [\\[\\e[32m\\]\\w\\[\\e[0m\\]] $ "));
+        }
+        program
+    } else {
+        CommandBuilder::new("powershell.exe")
+    };
+
+    // cmd.env("PROMPT", format!("Terux$${alias} $P$G")); // CMD.EXE
+    // cmd.args(&["-NoProfile", "-NoExit", "-Command", &prompt_script]); // POWERSHELL
+
     let _child = pair.slave.spawn_command(cmd).unwrap();
 
     let mut reader = pair.master.try_clone_reader().unwrap();

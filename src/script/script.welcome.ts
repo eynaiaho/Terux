@@ -220,22 +220,22 @@ document.querySelectorAll('input[type="button"]').forEach(element => {
             case "gemini":
                 AiapiInput.value = "AIza";
                 AimodelInput.placeholder = "gemini-3.1-flash-lite";
-                AiServiceInput.placeholder = "Gemini";
+                AiServiceInput.value = "Gemini";
                 break;
             case "claude":
                 AiapiInput.value = "sk-ant-";
                 AimodelInput.placeholder = "claude-3-haiku";
-                AiServiceInput.placeholder = "Claude";
+                AiServiceInput.value = "Claude";
                 break;
             case "groq":
                 AiapiInput.value = "gsk_";
                 AimodelInput.placeholder = "llama-3.1-8b-instant";
-                AiServiceInput.placeholder = "Groq";
+                AiServiceInput.value = "Groq";
                 break;
             case "deepseek":
                 AiapiInput.value = "sk-";
                 AimodelInput.placeholder = "deepseek-v4-flash";
-                AiServiceInput.placeholder = "DeepSeek";
+                AiServiceInput.value = "DeepSeek";
                 break;
         }
     });

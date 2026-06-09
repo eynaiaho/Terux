@@ -12,112 +12,69 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { listen } from "@tauri-apps/api/event";
 
 // other
-import { declarePanic } from "./script.main.utils";
-
-let smartStatus: Boolean = false;
+import { declarePanic, terminalConfig, smartMode, sendToAI } from "./script.main.utils";
 
 const window = getCurrentWindow();
 
-let myStorage = "";
-
-const getCSSVar = (varName: string) => {
-    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-}
-
-const myTheme = {
-    background: getCSSVar("--background-darker"),
-    foreground: getCSSVar("--text"),
-    cursor: getCSSVar("--accent"),
-    selectionBackground: getCSSVar("--background-lighter"),
-    red: getCSSVar("--error"),
-    green: getCSSVar("--success")
-}
-
-const term = new Terminal({
-    cursorBlink: true,
-    cursorWidth: 5,
-
-    fontFamily: '"JetBrains Mono", monospace',
-    fontSize: 14,
-    fontWeight: 'normal',
-
-    convertEol: true,
-    allowProposedApi: true,
-
-    theme: myTheme
-});
+export const term = new Terminal(terminalConfig());
 const fitAddon = new FitAddon();
 
 term.loadAddon(fitAddon);
 
 const terminal = document.getElementById("terminal") || null;
 
-document.fonts.load('14px "JetBrains Mono"').then(async () => {
-    terminal ? term.open(terminal) : await declarePanic("Terminal not found, will you close the terminal?", true);
+document.fonts.ready.then(async () => {
+    if (!terminal) {
+        await declarePanic("Terminal not found, will you close the terminal?", true);
+        return;
+    }
+    term.open(terminal)
 
     try {
         const webglAddon = new WebglAddon();
         term.loadAddon(webglAddon);
     } catch (e) {
-        console.warn("Ekran kartı WebGL dessteklemiyor, alternatif yöntem çalıştırılacak", e);
+        console.warn("Ekran kartı WebGL desteklemiyor, alternatif yöntem çalıştırılacak", e);
     }
 
     fitAddon.fit();
 
-    term.write("Terux Terminal is currently running...\r\n$>");
+    await invoke('resize_pty', {
+        cols: term.cols,
+        rows: term.rows
+    });
 });
-
-const smartButton = document.getElementById("smartButton");
-
-document.getElementById("smartButton")?.addEventListener("click", () => {
-    smartMode(!smartStatus);
-});
-
-const smartMode = (status: Boolean) => {
-    smartStatus = status;
-    if (smartStatus && smartButton) {
-        smartButton.style.filter = "brightness(1.4)";
-    } else if (smartButton) {
-        smartButton.style.filter = "brightness(1)";
-    }
-}
 
 listen("ai_error", (data) => {
     console.error(data)
 });
 
-let aiInputBuffer = "";
 term.onData(async (data) => {
-    if (smartStatus) {
-        if (data === "\r") {
-            const query = aiInputBuffer;
-            aiInputBuffer = "";
-            smartMode(false);
+    if (data === "\r") {
+        const buffer = term.buffer.active;
+        const currentLine = buffer.getLine(buffer.cursorY + buffer.baseY)?.translateToString(true).trim();
+        const commandIndex = currentLine?.indexOf("!teruxai");
+        if (commandIndex === undefined) return;
+        if (commandIndex !== -1) {
+            const question = currentLine?.substring((commandIndex || 0) + 8).trim();
 
-            term.write(`\x1b[${query.length}D\x1b[K`);
+            if (!question) return;
 
-            try {
-                term.write("\x1b[33m[AI Düşünüyor...]\x1b[0m");
-                const response = await invoke("ask_ai", { data: query });
-                term.write(`\x1b[17D\x1b[K`);
-                await invoke("inject_str", { data: `${response}` });
-            } catch (error) {
-                console.error(error);
-                term.write(`\x1b[17D\x1b[K\x1b[31m[Conflict Error | Shutdown the Terminal]\x1b[0m\r\n`);
-            }
+            sendToAI(term, question);
 
-        } else if (data === "\x7F") {
-            if (aiInputBuffer.length > 0) {
-                aiInputBuffer = aiInputBuffer.slice(0, -1);
-                term.write("\b \b");
-            }
-        } else {
-            aiInputBuffer += data;
-            term.write(data);
+            return;
         }
-        return;
     }
+    console.log(data);
     await invoke("inject_str", { data: data });
+});
+
+term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key.toLowerCase() === 'g') {
+        smartMode(true);
+        return false;
+    }
+    return true;
 });
 
 listen("bc-terminal-data", (data) => {
@@ -150,6 +107,5 @@ document.querySelector(".navbar-right-screen")?.addEventListener("click", async 
 });
 
 document.querySelector(".navbar-right-exit")?.addEventListener("click", async () => {
-    const response = await invoke("send_user_data", { data: JSON.stringify({ alias: "naberlo", a: "sgadgsd" }) });
-    console.log(response)
+    await window.close();
 });

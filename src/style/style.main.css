@@ -58,6 +58,7 @@ body {
     border-bottom: 1px solid var(--border);
 
     box-shadow: 5px 5px 50px 5px rgba(154, 37, 196, 0.05);
+    z-index: 6;
 }
 
 .navbar-touch {
@@ -322,4 +323,74 @@ body {
 
 #smartButton {
     transition: filter 0.5s;
+}
+
+.menu {
+    display: none;
+}
+
+.menu[active] {
+    display: flex;
+}
+
+.ai-div {
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+}
+
+.ai-input::placeholder {
+    color: var(--muted-text);
+}
+.ai-center-div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.ai-input-div {
+    position: relative;
+}
+.ai-input {
+    background: var(--background-main);
+    color: var(--text);
+
+    border: none;
+    border-radius: 8px;
+
+    padding: 1.5em;
+    width: 70vw;
+    font-size: 1em;
+    padding-right: 100px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+
+    z-index: 5;
+}
+.ai-input:hover,
+.ai-input:focus {
+    outline: none;
+}
+
+.ai-button {
+    background: var(--background-darker);
+    color: var(--text);
+    
+    border: none;
+    border-radius: 6px;
+
+    padding: 10px;
+
+    cursor: pointer;
+    transition: 0.2s;
+
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(-35%, -50%);
+}
+.ai-button:hover {
+    background-color: var(--background-lighter);
 }
