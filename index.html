@@ -51,7 +51,7 @@
             </div>
         </div>
         <!-- TERMINAL BODY -->
-        <div class="body menu" active>
+        <div class="body menu">
             <div class="body-head">
                 <div class="body-left">
                     <div style="display: flex;flex-direction: row;min-width: 0;">
@@ -103,7 +103,7 @@
             </div>
         </div>
         <!-- TERMINAL SETTINGS -->
-        <div class="settings menu">
+        <div class="settings menu" active>
             <div class="settings-body">
                 <div class="settings-c">
                     <div class="settings-a">
@@ -122,7 +122,7 @@
                             </div>
                         </div>
 
-                        <div class="settings-content-users settings-content" active>
+                        <div class="settings-content-users settings-content">
                             <div class="settings-content-div">
                                 <div class="settings-content-div-key-value">
                                     <div class="settings-content-key"><label for="editAlias"
@@ -181,14 +181,16 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="settings-content-ai settings-content"> <!--BURADA KALDIN-->
+                        <div class="settings-content-ai settings-content" active> <!--BURADA KALDIN-->
                             <div class="settings-content-div">
                                 <div class="settings-content-div-key-value">
                                     <div class="settings-content-key"><label for="editAPI"
                                             class="settings-content-label">Your API</label></div>
-                                    <div class="settings-content-value"><input type="text"
-                                            class="settings-content-input settings-change" id="aiApiInput"
-                                            name="editAPI"></div>
+                                    <div class="settings-content-value">
+                                        <input type="password" class="settings-content-input settings-change"
+                                            id="aiApiInput" name="editAPI">
+                                        <button id="toggleHideAPI">?</button>
+                                    </div>
                                 </div>
                                 <div class="settings-content-div-key-value">
                                     <div class="settings-content-key"><label for="editModel"

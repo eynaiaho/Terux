@@ -150,6 +150,25 @@ export const settingsToObject = () => {
     return object
 }
 
+export const toggleHideShow = () => {
+    let should_show: boolean = false;
+    let element = findElement("#toggleHideAPI") as HTMLButtonElement;
+    if(!element) console.error("Cannot find toggleHideAPI");
+
+    return function () {
+        should_show = !should_show;
+        if(should_show === true) {
+            divSettingsMenu.buttons.ai_datas.ai_api_data.type = "text";
+            element.textContent = "=";
+            element.style.opacity = "0.5";
+        } else {
+            divSettingsMenu.buttons.ai_datas.ai_api_data.type = "password";
+            element.textContent = "?";
+            element.style.opacity = "1";
+        }
+    }
+}
+
 export const initData = async () => {
     const userConfig = await getUserConfig();
     changeBackground(userConfig.theme);

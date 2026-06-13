@@ -89,7 +89,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
+.settings-content-value button#toggleHideAPI {
+    background-color: var(--border);
+    color: var(--text);
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    height: 2em;
+    width: 2em;
+
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-30%, -50%);
+    transition: 0.2s;
+}
+.settings-content-value button#toggleHideAPI:hover {
+    filter: brightness(1.1);
+} .settings-content-value button#toggleHideAPI:active {
+    filter: brightness(1.5);
+}
+
 .settings-content-key {
     flex: 40%;
 }

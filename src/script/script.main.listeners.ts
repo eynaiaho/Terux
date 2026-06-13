@@ -1,4 +1,4 @@
-import { addListener, findElement, changeMenu, settingsToObject, loadSettings, saveSettings, smartMode, sendToAI } from "./script.main.utils";
+import { addListener, findElement, changeMenu, settingsToObject, loadSettings, saveSettings, smartMode, sendToAI, toggleHideShow } from "./script.main.utils";
 import { addNewTab } from "./script.main.tab";
 import { aiDivMenu, divMenu, divSettingsMenu } from "./script.main.assets";
 import { GLOBAL_USER_CONFIG } from "./script.main.config";
@@ -8,6 +8,9 @@ const addTabListener = addListener("click", "#addTab", () => {
     addNewTab();
 });
 
+const toggleAPIVisible = toggleHideShow();
+
+/*
 window.addEventListener('keydown', (e) => {
     const blockedFunctionKeys = ['F1', 'F3', 'F5', 'F6', 'F7', 'F10', 'F11', 'F12'];
     const blockedCtrlLetters = [
@@ -37,6 +40,7 @@ window.addEventListener('keydown', (e) => {
         return;
     }
 });
+*/
 
 addListener("wheel", ".body-tabs", (event) => {
     event.preventDefault();
@@ -128,3 +132,8 @@ addListener("click", ".settings-theme-button", (event) => {
 addListener("change", ".settings-change", (event) => {
     divSettingsMenu.buttons.save_button.setAttribute("active", "");
 }, true);
+
+// Settings Toggle Hide
+addListener("click", "#toggleHideAPI", (event) => {
+    toggleAPIVisible();
+});
