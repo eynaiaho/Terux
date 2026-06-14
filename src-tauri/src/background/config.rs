@@ -1,6 +1,8 @@
+use portable_pty::MasterPty;
 use serde::{Deserialize, Serialize};
 use serde_json;
-use std::fs;
+use tokio::sync::Mutex;
+use std::{fs, sync::Arc};
 use tauri::{AppHandle, Manager};
 
 static _PATH_: &str = "terux_config.json";
@@ -26,6 +28,21 @@ pub struct UserConfig {
 pub struct ProgramConfig {
     pub os: String,
     pub cmd: Option<String>,
+}
+
+#[derive(Clone)]
+pub struct TerminalConfig {
+    pub terminal: Arc<Mutex<Option<Box<dyn MasterPty + Send>>>>,
+    pub pid: Arc<Mutex<Option<u32>>>,
+}
+
+impl TerminalConfig {
+    pub fn get_terminal_config() -> Self {
+        Self {
+            terminal: Arc::new(Mutex::new(None)),
+            pid: Arc::new(Mutex::new(None))
+        }
+    }
 }
 
 impl ProgramConfig {

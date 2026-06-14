@@ -1,8 +1,7 @@
-use portable_pty::MasterPty;
 use std::env;
 use std::option::Option;
 use std::sync::Arc;
-use tokio::sync::{mpsc, mpsc::Sender, Mutex};
+use tokio::sync::{mpsc, mpsc::Sender, Mutex, watch};
 
 use tauri::{Manager, WebviewWindow};
 
@@ -14,17 +13,20 @@ mod ui;
 
 pub struct AiAsk {
     pub query: String,
+    pub current_path: String,
     pub reply_tx: tokio::sync::oneshot::Sender<String>,
 }
 
 pub struct AppData {
     user_config: Arc<Mutex<background::config::UserConfig>>,
     program_config: Arc<Mutex<background::config::ProgramConfig>>,
+    terminal_config: Arc<Mutex<background::config::TerminalConfig>>,
+    current_path_tx: watch::Sender<String>,
+    current_path_rx: Arc<Mutex<watch::Receiver<String>>>,
     pipe_terminal_tx: Sender<String>,
     pipe_terminal_rx: Arc<Mutex<Option<mpsc::Receiver<String>>>>,
     pipe_ai_tx: Sender<AiAsk>,
     pipe_ai_rx: Arc<Mutex<Option<mpsc::Receiver<AiAsk>>>>,
-    terminal: Arc<Mutex<Option<Box<dyn MasterPty + Send>>>>,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -44,19 +46,24 @@ pub async fn run() {
             let (tx_terminal, rx_terminal) = mpsc::channel::<String>(100);
             let (tx_ai, rx_ai) = mpsc::channel::<AiAsk>(100);
 
+            let (tx_path, rx_path) = watch::channel::<String>(String::from("Unknow Path"));
+
             let user_config_data = background::config::UserConfig::get_data(&handle);
             let program_config_data = background::config::ProgramConfig::detect();
+            let terminal_config_data = background::config::TerminalConfig::get_terminal_config();
 
             let ai_data = user_config_data.ai.clone();
 
             app.manage(AppData {
                 user_config: Arc::new(Mutex::new(user_config_data)),
                 program_config: Arc::new(Mutex::new(program_config_data)),
+                terminal_config: Arc::new(Mutex::new(terminal_config_data)),
+                current_path_tx: tx_path.clone(),
+                current_path_rx: Arc::new(Mutex::new(rx_path)),
                 pipe_terminal_tx: tx_terminal.clone(),
                 pipe_terminal_rx: Arc::new(Mutex::new(Some(rx_terminal))),
                 pipe_ai_tx: tx_ai.clone(),
                 pipe_ai_rx: Arc::new(Mutex::new(Some(rx_ai))),
-                terminal: Arc::new(Mutex::new(None)),
             });
 
             let pty_handle = handle.clone();
@@ -86,6 +93,7 @@ pub async fn run() {
                                     rx,
                                     pty_tx_terminal,
                                     pty_tx_ai,
+                                    tx_path,
                                     pty_handle,
                                 )
                                 .await;

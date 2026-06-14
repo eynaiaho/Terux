@@ -20,11 +20,22 @@ pub async fn inject_str(state: State<'_, AppData>, data: String) -> Result<Strin
 pub async fn ask_ai(state: State<'_, AppData>, data: String) -> Result<String, String> {
     let (r_tx, r_rx) = oneshot::channel::<String>();
     let tx = state.pipe_ai_tx.clone();
+
+    let rx_path_arc = state.current_path_rx.clone();
+    let rx_path = rx_path_arc.lock().await;
+    let current_path_data: String = rx_path.borrow().clone();
+    drop(rx_path);
+
+    println!("{}", &current_path_data);
+
     let ai_ask = AiAsk {
         query: data,
+        current_path: current_path_data,
         reply_tx: r_tx,
     };
+
     tx.send(ai_ask).await.unwrap();
+
     match r_rx.await {
         Ok(data) => Ok(data),
         Err(_) => Err("hata".into()),
@@ -33,9 +44,11 @@ pub async fn ask_ai(state: State<'_, AppData>, data: String) -> Result<String, S
 
 #[command]
 pub async fn resize_pty(state: State<'_, AppData>, cols: u16, rows: u16) -> Result<String, String> {
-    let raw_terminal = state.terminal.clone();
-    let mut terminal_key = raw_terminal.lock().await;
-    if let Some(ref mut terminal) = *terminal_key {
+    let terminal_config_arc = state.terminal_config.clone();
+    let terminal_config = terminal_config_arc.lock().await;
+    let terminal_config_master_arc = terminal_config.terminal.clone();
+    let mut terminal_config_master = terminal_config_master_arc.lock().await;
+    if let Some(ref mut terminal) = *terminal_config_master {
         let _ = terminal.resize(PtySize {
             rows: rows,
             cols: cols,

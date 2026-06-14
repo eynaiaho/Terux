@@ -34,8 +34,9 @@ pub async fn send_user_data(
     if let Some(rx) = rx_terminal {
         let pty_tx_terminal = state.pipe_terminal_tx.clone();
         let pty_tx_ai = state.pipe_ai_tx.clone();
+        let current_path_tx = state.current_path_tx.clone();
         tauri::async_runtime::spawn(async move {
-            pty_manager::start_terminal(rx, pty_tx_terminal, pty_tx_ai, pty_handle).await;
+            pty_manager::start_terminal(rx, pty_tx_terminal, pty_tx_ai, current_path_tx, pty_handle).await;
         });
     }
     let _ = welcome_window.unwrap().close();
