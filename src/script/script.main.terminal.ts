@@ -13,6 +13,10 @@ import { listen } from "@tauri-apps/api/event";
 
 // other
 import { declarePanic, terminalConfig, smartMode, sendToAI } from "./script.main.utils";
+import { show } from "@tauri-apps/api/app";
+
+let currentPlaceholder: string = "";
+let isPlaceholderVisible: boolean = false;
 
 const window = getCurrentWindow();
 
@@ -49,7 +53,31 @@ listen("ai_error", (data) => {
     console.error(data)
 });
 
+listen("terminal_error", async (error) => {
+    console.log(error);
+    try {
+        const response = await invoke("ask_ai", { data: `Read the error message the user received and issue the correct command to prevent the error from recurring. Current Error Message: ${error.payload}` });
+        showPlaceholder(response as string);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+term.onKey(async (event) => {
+    const ev = event.domEvent;
+    if (isPlaceholderVisible && ev.key === "ArrowRight") {
+        clearPlaceholder();
+        await invoke("inject_str", { data: currentPlaceholder });
+        currentPlaceholder = "";
+        ev.preventDefault();
+        return;
+    }
+})
+
 term.onData(async (data) => {
+    if (isPlaceholderVisible) {
+        clearPlaceholder();
+    }
     if (data === "\r") {
         const buffer = term.buffer.active;
         const currentLine = buffer.getLine(buffer.cursorY + buffer.baseY)?.translateToString(true).trim();
@@ -86,6 +114,23 @@ listen("bc-terminal-data", (data) => {
         term.write(payload);
     }
 });
+
+const showPlaceholder = (data: string) => {
+    if (isPlaceholderVisible) return;
+    currentPlaceholder = data;
+    const currentFormat = `\x1b[s\x1b[90m${currentPlaceholder}\x1b[0m\x1b[u`;
+    term.write(currentFormat);
+    isPlaceholderVisible = true;
+}
+
+const clearPlaceholder = () => {
+    if (!isPlaceholderVisible) return;
+    if (currentPlaceholder == "") return;
+    const textLength = currentPlaceholder.length;
+    const spaces = " ".repeat(textLength);
+    term.write(`\x1b[s${spaces}\x1b[u`);
+    isPlaceholderVisible = false;
+}
 
 // listeners
 

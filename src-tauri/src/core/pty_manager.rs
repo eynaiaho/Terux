@@ -1,10 +1,16 @@
 use portable_pty::{native_pty_system, CommandBuilder, PtySize};
 use tauri::{AppHandle, Emitter, Manager};
-use tokio::sync::{mpsc::{Receiver, Sender}, watch};
+use tokio::sync::{
+    mpsc::{Receiver, Sender},
+    watch,
+};
 
 use std::io::Write;
 
-use crate::{core::path_tracker::PathTracker, AiAsk, AppData};
+use crate::{
+    core::{error_tracker::ErrorTracker, path_tracker::PathTracker},
+    AiAsk, AppData,
+};
 
 pub async fn start_terminal(
     mut rx: Receiver<String>,
@@ -35,7 +41,21 @@ pub async fn start_terminal(
         .unwrap();
 
     let prompt_script = format!(
-        "Import-Module PSReadLine; function prompt {{ $e=[char]27; \"$e]7;file://localhost/$($pwd.ProviderPath)$e\\$('Terux${} ' + $pwd.Path + '> ')\" }}",
+        "Import-Module PSReadLine -ErrorAction SilentlyContinue; \
+        function prompt {{ \
+            $last_command = $?; \
+            $e = [char]27; \
+            if (!$last_command) {{ \
+                $hist = Get-History -Count 1; \
+                $cmd_line = if ($hist) {{ $hist.CommandLine -replace '`r?`n', ' ' }} else {{ \"Unknown\" }}; \
+                $is_ps_error = ($Error.Count -gt 0) -and ($Error[0].InvocationInfo.Line -like \"*$cmd_line*\"); \
+                $err_msg = if ($is_ps_error) {{ $($Error[0].Exception.Message -replace '`r?`n', ' ') }} else {{ \"External command failed (Exit code: $LASTEXITCODE)\" }}; \
+                $err_block = \"$e]99;CMD: $cmd_line | MSG: $err_msg$e\\\"; \
+            }} \
+            $path_block = \"$e]7;file://localhost/$($pwd.ProviderPath)$e\\\"; \
+            $visual_prompt = \"Terux`${} $($pwd.Path)> \"; \
+            return \"$err_block$path_block$visual_prompt\" \
+        }}",
         alias
     );
 
@@ -44,11 +64,23 @@ pub async fn start_terminal(
         if os == "windows" && c == "powershell.exe" {
             program.args(&["-NoProfile", "-NoExit", "-Command", &prompt_script]);
         } else if os == "windows" && c == "cmd.exe" {
-            program.env("PROMPT", format!("$E]7;file//localhost/$P$E\\Terux$${alias} $P$G"));
+            program.env(
+                "PROMPT",
+                format!("$E]7;file//localhost/$P$E\\Terux$${alias} $P$G"),
+            );
         } else if os == "linux" && c == "bash" {
             program.env(
                 "PS1",
-                format!("\\[\\e]7;file://localhost/$PWD\\e\\\\\\]Terux${alias} [\\[\\e[32m\\]\\w\\[\\e[0m\\]] $ "),
+                format!(
+                        "$( \
+                            err=$?; \
+                            if [ $err -ne 0 ]; then \
+                                cmd=$(history 1 | sed 's/^[ \\t]*[0-9]*[ \\t]*//'); \
+                                printf '\\033]99;CMD: %s | MSG: Exit code %s\\033\\\\' \"$cmd\" \"$err\"; \
+                            fi \
+                        )\\[\\e]7;file://localhost/$PWD\\e\\\\\\]Terux${} [\\[\\e[32m\\]\\w\\[\\e[0m\\]] $ ",
+                    alias
+                ),
             );
         }
         program
@@ -84,6 +116,7 @@ pub async fn start_terminal(
     let mut reader_task = tokio::task::spawn_blocking(move || {
         let mut buffer = [0u8; 4096];
         let mut path_tracker = PathTracker::new();
+        let mut error_tracker = ErrorTracker::new();
 
         let mut current_path = path_tracker.current_path.clone();
 
@@ -94,6 +127,13 @@ pub async fn start_terminal(
                 Ok(n) => {
                     for &b in &buffer[..n] {
                         path_tracker.process_byte(b);
+                        error_tracker.process_byte(b);
+                    }
+
+                    if error_tracker.has_new_error == true {
+                        println!("hata verdi");
+                        let _ = app.emit("terminal_error", error_tracker.error.clone());
+                        error_tracker.clear_error();
                     }
 
                     if current_path != path_tracker.current_path {

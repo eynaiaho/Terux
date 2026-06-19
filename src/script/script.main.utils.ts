@@ -88,7 +88,7 @@ export const sendToAI = async (term: Terminal, data: string) => {
 
         term.write(`\x1b[16D\x1b[K`);
 
-        await invoke("inject_str", { data: `${response}` });
+        await invoke("inject_str", { data: response });
     } catch (error) {
         console.error(error);
         term.write(`\x1b[17D\x1b[K\x1b[31m[AI Error | Restart the Terminal]\x1b[0m\r\n`);
