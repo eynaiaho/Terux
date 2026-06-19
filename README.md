@@ -144,7 +144,7 @@ This project is in alpha. If you find a bug or have a suggestion, feel free to o
 
 ## License
 
-To be determined.
+MIT
 
 ---
 
