@@ -12,6 +12,8 @@ pub struct Ai {
     pub api: String,
     pub model: String,
     pub service: String,
+    pub source: String,
+    pub temperature: f32
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -119,6 +121,8 @@ impl UserConfig {
                 api: String::from(""),
                 model: String::from(""),
                 service: String::from(""),
+                source: String::from(""),
+                temperature: 0.0
             },
             telemetry: false,
             onboarding_complete: false,

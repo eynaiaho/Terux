@@ -202,6 +202,8 @@ export const terminalConfig = (): Object => {
         convertEol: true,
         allowProposedApi: true,
 
+        scrollback: 10000,
+
         theme: myTheme
     }
 

@@ -26,6 +26,8 @@ interface UserSettings {
         api: string;
         model: string;
         service: string;
+        source: string;
+        temperature: number;
     };
     telemetry: boolean;
     onboarding_complete: boolean;
@@ -34,7 +36,9 @@ interface UserSettings {
 interface AiObject {
     api: string;
     model: string;
-    service: string
+    service: string;
+    source: string;
+    temperature: number;
 }
 
 const aiInputs: AiInputs = {
@@ -50,7 +54,9 @@ const userSettings: UserSettings = {
     "ai": {
         "api": "",
         "model": "",
-        "service": ""
+        "service": "",
+        "source": "",
+        "temperature": 0.0
     },
     "telemetry": false,
     "onboarding_complete": false
@@ -96,17 +102,23 @@ const getFont = (): boolean | string => {
 }
 
 const getAI = (): boolean | AiObject => {
-    const api = aiInputs.apiInput.value;
+    let api = aiInputs.apiInput.value;
     if (!api) return false;
-    const model = aiInputs.modelInput.value;
+    let model = aiInputs.modelInput.value;
     if (!model) return false;
-    const service = aiInputs.serviceInput.value;
+    let service = aiInputs.serviceInput.value;
     if (!service) return false;
+    let source = "";
+    if(service === "Ollama") {
+        source = api;api = "";
+    }
 
     const aiObject: AiObject = {
         "api": api,
         "model": model,
-        "service": service
+        "service": service,
+        "source": source,
+        "temperature": 0.0,
     }
 
     return aiObject
@@ -237,6 +249,11 @@ document.querySelectorAll('input[type="button"]').forEach(element => {
                 AimodelInput.placeholder = "deepseek-v4-flash";
                 AiServiceInput.value = "DeepSeek";
                 break;
+            case "ollama":
+                AiapiInput.value = "";
+                AiapiInput.placeholder = "http://localhost:port";
+                AimodelInput.placeholder = "Local AI Model Name";
+                AiServiceInput.value = "Ollama";
         }
     });
 });

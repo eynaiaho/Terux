@@ -25,6 +25,8 @@ pub async fn start_ai(
             service = LLMBackend::Anthropic;
         } else if ai.service == "DeepSeek" {
             service = LLMBackend::DeepSeek;
+        } else if ai.service == "Ollama" {
+            service = LLMBackend::Ollama;
         }
         service
     };
@@ -38,13 +40,18 @@ pub async fn start_ai(
 
     let system_command = format!("As an AI assistant, the user will ask you to run a terminal command. Receive the user's request and return only the executable command appropriate for the specified operating system and terminal; do not say anything else, otherwise the command you provide will not run in the terminal and will return an error. SYSTEM: {}, TERMINAL: {}", os.to_uppercase(), cmd.unwrap_or(String::from("BASH")).to_uppercase());
 
-    let raw_llm = LLMBuilder::new()
+    let mut builder = LLMBuilder::new()
         .backend(current_service)
-        .api_key(ai.api)
         .model(ai.model)
-        .system(system_command)
-        .build()
-        .unwrap();
+        .system(system_command);
+
+    if ai.service == "Ollama" {
+        builder = builder.base_url(ai.source).temperature(0.0);
+    } else {
+        builder = builder.api_key(ai.api);
+    }
+
+    let raw_llm = builder.build().unwrap();
     let llm = Arc::new(raw_llm);
 
     let messager: Arc<Mutex<Vec<ChatMessage>>> = Arc::new(Mutex::new(vec![]));
