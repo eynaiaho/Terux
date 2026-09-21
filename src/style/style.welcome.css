@@ -89,13 +89,13 @@ style="background-color: darkred;color: white;font-weight: bold;padding: 10px;bo
 
 .body-q-form input[type="button"] {
     background: var(--background-lighter);
-    min-width: 10em;
-    padding: 0.8em;
+    min-width: 10em; 
+    padding: 0.8em; 
     margin: 5px 0;
     border: none;
-    border-radius: 0.1em;
-    transition: 0.2s ease-in-out;
-    cursor: pointer;
+    border-radius: 0.1em; 
+    transition: 0.2s ease-in-out; 
+    cursor: pointer; 
 }
     
     

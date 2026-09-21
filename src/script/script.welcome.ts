@@ -68,13 +68,16 @@ let currentFont: string = "";
 document.querySelectorAll('input[type="button"]').forEach(element => {
     element.addEventListener("click", (event) => {
         if (!event.target) return;
+        
         if ((event.target as HTMLInputElement).closest(".theme")) {
             currentTheme = element.id;
         } else if ((event.target as HTMLInputElement).closest(".font")) {
             currentFont = element.id;
         }
-        document.querySelectorAll('input[type="button"]').forEach(e => (e as HTMLElement).style.filter = ("brightness(1)"));
-        (element as HTMLElement).style.filter = "brightness(0.5)";
+        document.querySelectorAll('input[type="button"]').forEach(e => {
+            (e as HTMLElement).classList.remove("!brightness-50");
+        });
+        (element as HTMLElement).classList.add("!brightness-50");
     })
 });
 
@@ -179,9 +182,9 @@ const sendError = (data: string, status: boolean = true) => {
     errorBox.textContent = data;
 
     if (status === true) {
-        errorBox.style.display = "inline";
+        errorBox.classList.add("inline");
     } else if (status === false) {
-        errorBox.style.display = "none";
+        errorBox.classList.add("hidden");
     }
 }
 

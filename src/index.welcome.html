@@ -17,18 +17,17 @@
         </div>
         <div class="flex justify-center items-center w-full h-full grow">
             <div class="flex items-center flex-col max-w-[60vw]">
-                <progress value="0" max="100" id="progressBar" class="appearance-none h-[0.2em] w-[50vw] absolute top-[10%] [&::-webkit-progress-value]:bg-(--accent) rounded-[1em] relative [&::-webkit-progress-bar]:bg-(--background-darker) rounded-[1em] [&::-moz-progress-bar]:bg-(--accent)"></progress>
+                <progress value="0" max="100" id="progressBar" class="appearance-none h-[0.2em] w-[50vw] absolute top-[10%] [&::-webkit-progress-value]:bg-(--accent) rounded-[1em] [&::-webkit-progress-bar]:bg-(--background-darker) rounded-[1em] [&::-moz-progress-bar]:bg-(--accent)"></progress>
                 <div class="body-icon">
                     <img src="../../icons/terux.png" width="100" height="100" alt="Terux Icon">
                 </div>
                 <div class="body-q hidden [&[active]]:flex [&[active]]:items-center [&[active]]:flex-col q1" data-q="1" active>
-                    <span>Thanks for using Terux! We got some questions for your privacy and user customization.</span>
+                    <span class="text-center">Thanks for using Terux! We got some questions for your privacy and user customization.</span>
                     <button id="q1" class="bg-(--border) text-(--text) p-[0.8em] border-none rounded-[7px] my-2.5 mx-0 w-[10em] duration-200 transition-[filter] ease-in-out cursor-pointer hover:brightness-[1.5] active:brightness-[2]">Begin</button>
                 </div>
                 <div class="body-q hidden [&[active]]:flex [&[active]]:items-center [&[active]]:flex-col q2" data-q="2">
                     <span class="text-(--text) font-bold text-[1.1rem] my-[0.2em] mx-0 text-center">Who are you?</span>
-                    <span class="mb-[0.5em] flex text-center">Enter your developer alias. This will be your identity in the
-                        terminal.</span>
+                    <span class="mb-[0.5em] flex text-center">Enter your developer alias. This will be your identity in the terminal.</span>
                     <div class="flex flex-col justify-center">
                         <label for="alias"></label>
                         <input type="text" name="alias" id="alias" maxlength="15" class="bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-2.5 w-[50vw] outline-none transition-all duration-200 hover:ring-1 hover:ring-(--background-darker) focus:ring-1 focus:ring-(--accent)">
@@ -41,16 +40,16 @@
                         settings.</span>
                     <div class="flex flex-col justify-center theme">
                         <label for="tn"></label>
-                        <input type="button" value="Tokyo Night (Default)" name="tn" id="tn" class="min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer bg-[#1a1b26] text-[#a9b1d6] border-[#16161e] border-solid hover:brightness-[0.9]">
+                        <input type="button" value="Tokyo Night (Default)" name="tn" id="tn" class="min-w-40 text-sm p-[0.8em] my-[3px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer bg-[#1a1b26] text-[#a9b1d6] border-[#16161e] border-solid hover:brightness-[0.9]">
 
                         <label for="n"></label>
-                        <input type="button" value="Nord" name="n" id="n" class="min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#2e3440] text-[#eceff4]">
+                        <input type="button" value="Nord" name="n" id="n" class="min-w-40 text-sm p-[0.8em] my-[3px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#2e3440] text-[#eceff4]">
 
                         <label for="g"></label>
-                        <input type="button" value="Gruvbox" name="g" id="g" class="min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#282828] text-[#ebdbb2]">
+                        <input type="button" value="Gruvbox" name="g" id="g" class="min-w-40 text-sm p-[0.8em] my-[3px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#282828] text-[#ebdbb2]">
 
                         <label for="sl"></label>
-                        <input type="button" value="Solarized Light" name="sl" id="sl" class="min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#fdf6e3] text-[#657b83]">
+                        <input type="button" value="Solarized Light" name="sl" id="sl" class="min-w-40 text-sm p-[0.8em] my-[3px] border-none rounded-[0.1em] duration-200 ease-in-out cursor-pointer hover:brightness-[1.5] bg-[#fdf6e3] text-[#657b83]">
                     </div>
                     <button id="q3" class="bg-(--border) text-(--text) p-[0.8em] border-none rounded-[7px] my-2.5 mx-0 w-[10em] duration-200 transition-[filter] ease-in-out cursor-pointer hover:brightness-[1.5] active:brightness-[2]">Continue</button>
                 </div>
@@ -61,45 +60,45 @@
                     <div class="flex flex-col justify-center font">
                         <label for="jbm"></label>
                         <input type="button" value="JetBrains Mono" name="jbm" id="jbm"
-                            style="font-family: 'JetBrains Mono';" class="bg-(--background-lighter) min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
+                            style="font-family: 'JetBrains Mono';" class="bg-(--background-lighter) min-w-40 p-[0.8em] my-[3px] text-sm border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
 
                         <label for="fc"></label>
-                        <input type="button" value="Fira Code" name="fc" id="fc" style="font-family: 'Fira Code';" class="bg-(--background-lighter) min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
+                        <input type="button" value="Fira Code" name="fc" id="fc" style="font-family: 'Fira Code';" class="bg-(--background-lighter) min-w-40 p-[0.8em] my-[3px] text-sm border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
 
                         <label for="cc"></label>
                         <input type="button" value="Cascadia Code" name="cc" id="cc"
-                            style="font-family: 'Cascadia Code';" class="bg-(--background-lighter) min-w-[10em] p-[0.8em] my-[5px] border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
+                            style="font-family: 'Cascadia Code';" class="bg-(--background-lighter) min-w-40 p-[0.8em] my-[3px] text-sm border-none rounded-[0.1em] transition-all duration-200 ease-in-out cursor-pointer hover:brightness-150 text-(--text)">
                     </div>
                     <button id="q4" class="bg-(--border) text-(--text) p-[0.8em] border-none rounded-[7px] my-2.5 mx-0 w-[10em] duration-200 transition-[filter] ease-in-out cursor-pointer hover:brightness-[1.5] active:brightness-[2]">Finish</button>
                 </div>
-                <div class="body-q hidden [&[active]]:flex [&[active]]:items-center [&[active]]:flex-col q5" data-q="5">
+                <div class="body-q hidden [&[active]]:flex [&[active]]:items-center [&[active]]:flex-col gap- q5" data-q="5">
                     <span class="text-(--text) font-bold text-[1.1rem] my-[0.2em] mx-0 text-center">AI API</span>
 
                     <span class="mb-[0.5em] flex text-center">Enter the API of the AI you will be using.</span>
 
                     <div class="flex flex-row items-center gap-1.5">
-                        <div class="flex flex-col justify-center gap-0.5 cp">
+                        <div class="flex flex-row justify-center gap-0.5 cp">
                             <label for="gemini"></label>
-                            <input type="button" value="Gemini" name="gemini" id="gemini" class="p-[0.8em] min-w-[8em] rounded-[0.1em] cursor-pointer transition-all duration-200 hover:brightness-150 bg-[#1e1e23]/65 text-[#A67CFF] border-[1px] border-solid border-[#7A22FF]">
+                            <input type="button" value="Gemini" name="gemini" id="gemini" class="p-[0.8em] min-w-32 rounded-[0.1em] text-sm cursor-pointer transition-all duration-200 ease-in-out hover:brightness-150 bg-[rgba(30, 30, 35, 0.65)] text-[#A67CFF] border-[1px] border-solid border-[#7A22FF]">
 
                             <label for="claude"></label>
-                            <input type="button" value="Claude" name="claude" id="claude" class="p-[0.8em] min-w-[8em] rounded-[0.1em] cursor-pointer transition-all duration-200 hover:brightness-150 bg-[#1e1e23]/65 text-[#A67CFF] border-[1px] border-solid border-[#7A22FF]">
+                            <input type="button" value="Claude" name="claude" id="claude" class="p-[0.8em] min-w-32 rounded-[0.1em] text-sm cursor-pointer transition-all duration-200 hover:brightness-150 bg-[rgba(30, 30, 35, 0.65)] text-[#FF9E7D] border-[1px] border-solid border-[#D97757]">
 
                             <label for="groq"></label>
-                            <input type="button" value="Groq" name="groq" id="groq" class="p-[0.8em] min-w-[8em] rounded-[0.1em] cursor-pointer transition-all duration-200 hover:brightness-150 bg-[#1e1e23]/65 text-[#A67CFF] border-[1px] border-solid border-[#7A22FF]">
+                            <input type="button" value="Groq" name="groq" id="groq" class="p-[0.8em] min-w-32 rounded-[0.1em] text-sm cursor-pointer transition-all duration-200 hover:brightness-150 bg-[rgba(30, 30, 35, 0.65)] text-[#FF6B52] border-[1px] border-solid border-[#F55036]">
 
                             <label for="deepseek"></label>
-                            <input type="button" value="DeepSeek" name="deepseek" id="deepseek" class="p-[0.8em] min-w-[8em] rounded-[0.1em] cursor-pointer transition-all duration-200 hover:brightness-150 bg-[#1e1e23]/65 text-[#A67CFF] border-[1px] border-solid border-[#7A22FF]">
+                            <input type="button" value="DeepSeek" name="deepseek" id="deepseek" class="p-[0.8em] min-w-32 text-sm rounded-[0.1em] cursor-pointer transition-all duration-200 hover:brightness-150 bg-[rgba(30, 30, 35, 0.65)] text-[#708DFF] border-[1px] border-solid border-[#4D6BFE]">
                         </div>
                         <div class="flex flex-col justify-center ai_s la">
                             <label for="ollama"></label>
-                            <input type="button" value="Ollama" name="ollama" id="ollama" class="bg-[rgba(30, 30, 35, 0.65)] text-white border-[1px] border-solid border-white">
+                            <input type="button" value="Ollama" name="ollama" id="ollama" class="p-[0.8em] min-w-32 rounded-[0.1em] text-sm cursor-pointer transition-all duration-200 hover:brightness-150 bg-[rgba(30, 30, 35, 0.65)] text-white border-[1px] border-solid border-white">
                         </div>
                     </div>
                     <div class="flex flex-col justify-center gap-[5px] ai_input">
-                        <input type="text" value="AIza" id="aiApiInput">
-                        <input type="text" placeholder="gemini-3.1-flash-lite" id="aiModelInput">
-                        <input type="text" value="Gemini" id="aiServiceInput" readonly>
+                        <input type="text" value="AIza" id="aiApiInput" class="bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-2.5 w-[50vw]">
+                        <input type="text" placeholder="gemini-3.1-flash-lite" id="aiModelInput" class="bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-2.5 w-[50vw]">
+                        <input type="text" value="Gemini" id="aiServiceInput" class="bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-2.5 w-[50vw]" readonly>
                     </div>
 
                     <button id="q5" class="bg-(--border) text-(--text) p-[0.8em] border-none rounded-[7px] my-2.5 mx-0 w-[10em] duration-200 transition-[filter] ease-in-out cursor-pointer hover:brightness-[1.5] active:brightness-[2]">Begin</button>
