@@ -130,7 +130,7 @@ The AI is aware of your operating system and shell, so it returns the right synt
 - [ ] Working multi-tab sessions
 - [ ] Pre-built release binaries (`.exe`, `.deb`)
 - [ ] React.js frontend rewrite (planned for v1.0.0)
-- [🛠️] Ollama (local model) support
+- [x] 🛠️ Ollama (local model) support
 - [ ] Command history analysis
 - [ ] macOS support
 
