@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    color: var(--muted-text);
+    font-optical-sizing: auto;
+    font-style: normal;
+    letter-spacing: -0.02em;
+  }
+
+  *, *::before, *::after {
+    user-select: none;
+  }
+
+  input, textarea, [contenteditable="true"], .terminal-text-area {
+    user-select: text;
+  }
+}
+
+@layer utilities {
+  
+  .xterm-viewport {
+    background-color: var(--background-darker) !important;
+  }
+
+  .xterm-viewport::-webkit-scrollbar {
+    background-color: var(--background-lighter);
+  }
+
+  @media (max-height: 250px) and (min-height: 100px) {
+    .body-head * {
+      display: none !important;
+    }
+  }
+}
