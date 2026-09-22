@@ -215,6 +215,33 @@ buttons.forEach(button => {
     });
 });
 
+document.addEventListener("keydown", (event) => {
+    if(event.key === "Enter") {
+        const target = event.target as HTMLElement;
+        console.log(target);
+        if (!target) return;
+        const bodyQ = target?.closest(".body-q");
+        if (!bodyQ) return;
+        console.log(bodyQ);
+
+        const bodyQNumber = bodyQ.getAttribute("data-q") || "";
+        if (!bodyQNumber) return;
+        const bodyQNextNumber = (Number(bodyQ.getAttribute("data-q")) + 1).toString();
+        const pass = getSubmits(bodyQNumber, bodyQNextNumber);
+        console.log(bodyQNumber);
+        if (pass === false) {
+            sendError("Missing required fields. Please fill out all inputs.");
+            return;
+        };
+        sendError("", false);
+
+        bodyQ.removeAttribute("active");
+        progress.value += 20;
+        const newBodyQ = document.querySelector(`.q${bodyQNextNumber}`);
+        newBodyQ?.setAttribute("active", "");
+    }
+})
+
 document.getElementById("submit")?.addEventListener("click", async () => {
     if (!userSettings.alias || !userSettings.font || !userSettings.theme || !userSettings.ai) return;
     userSettings.onboarding_complete = true;
