@@ -183,8 +183,10 @@ const sendError = (data: string, status: boolean = true) => {
 
     if (status === true) {
         errorBox.classList.add("inline");
+        errorBox.classList.remove("hidden");
     } else if (status === false) {
         errorBox.classList.add("hidden");
+        errorBox.classList.remove("inline");
     }
 }
 
