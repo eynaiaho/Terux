@@ -44,7 +44,7 @@ window.addEventListener('keydown', (e) => {
 
 addListener("wheel", ".body-tabs", (event) => {
     event.preventDefault();
-    const element = findElement(".body-tabs");
+    const element = findElement("#bodyTabs");
     if (!element) return;
     element.scrollLeft += (event as WheelEvent).deltaY;
 });

@@ -39,14 +39,14 @@ body {
     overflow: hidden;
 }
 
-.terminal {
+.terminal { /* X */
     background: var(--background-main);
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-.navbar {
+.navbar { /* X */
     background: var(--background-darker);
 
     display: flex;
@@ -61,7 +61,7 @@ body {
     z-index: 6;
 }
 
-.navbar-touch {
+.navbar-touch { /* X */
     position: absolute;
     top: 0;
     left: 0;
@@ -70,7 +70,7 @@ body {
     z-index: 999;
 }
 
-.navbar-left {
+.navbar-left { /* X */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -79,30 +79,30 @@ body {
     user-select: none;
 }
 
-.navbar-left-logo img {
+.navbar-left-logo img { /* X */
     height: 20px;
     width: auto;
     margin-left: 5px;
 }
 
-.navbar-left-title {
+.navbar-left-title { /* X */
     display: flex;
     align-items: center;
 }
 
-.navbar-center {
+.navbar-center { /* X */
     display: flex;
     align-items: center;
     max-height: 40px;
 }
 
-.navbar-center-progress {
+.navbar-center-progress { /* X */
     color: var(--muted-text);
     user-select: none;
     opacity: 0.5;
 }
 
-.navbar-right {
+.navbar-right { /* X */
     display: flex;
     flex-direction: row;
     user-select: none;
@@ -110,7 +110,7 @@ body {
     height: 40px;
 }
 
-.navbar-button {
+.navbar-button { /* X */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,21 +119,21 @@ body {
     cursor: pointer;
 }
 
-.navbar-button svg {
+.navbar-button svg { /* X */
     shape-rendering: geometricPrecision;
 }
 
-.navbar-button:hover {
+.navbar-button:hover { /* X */
     background: var(--background-lighter);
     filter: brightness(1.2);
 }
 
-.navbar-right-exit:hover {
+.navbar-right-exit:hover { /* X */
     background: var(--error);
     filter: brightness(0.9);
 }
 
-.body {
+.body { /* X */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -143,13 +143,13 @@ body {
     min-height: 0;
 }
 
-.body-head {
+.body-head { /* X */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.body-left {
+.body-left { /* X */
     display: flex;
     flex-direction: row;
 
@@ -158,7 +158,7 @@ body {
     flex: 1;
 }
 
-.body-plus {
+.body-plus { /* X */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,18 +166,18 @@ body {
     background: transparent;
 }
 
-.body-plus svg {
+.body-plus svg { /* X */
     background: transparent;
     cursor: pointer;
     color: var(--text);
     transition: 0.2s;
 }
 
-.body-plus svg:hover {
+.body-plus svg:hover { /* X */
     filter: brightness(1.5);
 }
 
-.body-tabs {
+.body-tabs { /* X */
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -190,11 +190,11 @@ body {
     flex: 1;
 }
 
-.body-tabs::-webkit-scrollbar {
+.body-tabs::-webkit-scrollbar { /* X */
     display: none;
 }
 
-.body-tab {
+.custom-tab { /* ? */
     background: transparent;
     display: flex;
     flex-direction: row;
@@ -214,20 +214,20 @@ body {
     position: relative;
 }
 
-.body-tabs .body-tab:first-child {
+.custom-tabs .custom-tab:first-child {
     margin-left: 0;
 }
 
-.body-tab:not([active]):hover {
+.custom-tab:not([active]):hover {
     background: var(--background-lighter);
 }
 
-.body-tab[active] {
+.custom-tab[active] {
     background: var(--background-darker);
     font-weight: bold;
 }
 
-.body-tab[active]::before {
+.custom-tab[active]::before {
     content: "";
     position: absolute;
     width: 15px;
@@ -239,7 +239,7 @@ body {
             var(--background-darker) 15.5px);
 }
 
-.body-tab[active]::after {
+.custom-tab[active]::after {
     content: "";
     position: absolute;
     width: 15px;
@@ -251,7 +251,7 @@ body {
             var(--background-darker) 15.5px);
 }
 
-.body-tabs .body-tab:first-child:before {
+.body-tabs .custom-tab:first-child:before {
     background: transparent;
 }
 
@@ -261,50 +261,50 @@ body {
     margin: 0 5px;
 }
 
-.body-navs {
+.body-navs { /* X */
     display: flex;
     flex-direction: row;
 }
 
-.body-navs-settings {
+.body-navs-settings { /* X */
     height: 100%;
     margin: 0 0.4em;
 }
 
-.body-nav {
+.body-nav { /* X */
     display: flex;
     align-items: center;
 }
 
 .body-navs-settings svg,
-.body-navs-ai svg {
+.body-navs-ai svg { /* X */
     width: 30px;
     height: 30px;
     cursor: pointer;
     transition: filter 0.3s, transform 0.7s ease-in-out;
 }
 
-.body-navs-settings svg:hover {
+.body-navs-settings svg:hover { /* X */
     filter: brightness(1.2);
     transform: rotate(90deg);
     filter: drop-shadow(0 0 0.75rem var(--cursor-color));
 }
 
-.body-navs-ai svg:hover {
+.body-navs-ai svg:hover { /* X */
     filter: brightness(1.2);
     filter: drop-shadow(0 0 0.75rem var(--cursor-color));
 }
 
 
 
-.body-main {
+.body-main { /* X */
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     min-height: 0;
 }
 
-.body-main-terminal {
+.body-main-terminal { /* X */
     background: var(--background-darker);
     color: var(--text);
     flex-grow: 1;
@@ -313,7 +313,7 @@ body {
     position: relative;
 }
 
-.body-main-terminal #terminal {
+.body-main-terminal #terminal { /* X */
     position: absolute;
     top: 0.5em;
     left: 0.5em;
@@ -325,15 +325,15 @@ body {
     transition: filter 0.5s;
 }
 
-.menu {
+.menu { /* X */
     display: none;
 }
 
-.menu[active] {
+.menu[active] { /* X */
     display: flex;
 }
 
-.ai-div {
+.ai-div { /* X */
     background: rgba(0, 0, 0, 0.5);
     display: none;
     position: absolute;
@@ -344,16 +344,16 @@ body {
 .ai-input::placeholder {
     color: var(--muted-text);
 }
-.ai-center-div {
+.ai-center-div { /* X */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.ai-input-div {
+.ai-input-div { /* X */
     position: relative;
 }
-.ai-input {
+.ai-input { /* X */
     background: var(--background-main);
     color: var(--text);
 
@@ -370,11 +370,11 @@ body {
     z-index: 5;
 }
 .ai-input:hover,
-.ai-input:focus {
+.ai-input:focus { /* X */
     outline: none;
 }
 
-.ai-button {
+.ai-button { /* X */
     background: var(--background-darker);
     color: var(--text);
     
@@ -391,6 +391,6 @@ body {
     right: 0;
     transform: translate(-35%, -50%);
 }
-.ai-button:hover {
+.ai-button:hover { /* X */
     background-color: var(--background-lighter);
 }

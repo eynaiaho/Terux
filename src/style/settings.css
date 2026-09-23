@@ -1,10 +1,10 @@
-.settings {
+.settings { /* X */
     display: none;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
-.settings-body {
+.settings-body { /* X */
     background-color: var(--background-darker);
     width: 90vw;
     height: 80vh;
@@ -13,31 +13,31 @@
     padding: 10px;
 }
 
-.settings-c {
+.settings-c { /* X */
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     height: 100%;
     flex: 1 1 50%;
 }
-.settings-a, .settings-b {
+.settings-a, .settings-b { /* X */
     width: 100%;
     height: auto;
 }
-.settings-a {
+.settings-a { /* X */
     display: flex;
     flex-direction: column;
 }
-.settings-b {
+.settings-b { /* X */
     border-left: 1px solid var(--background-main);
 
     position: relative;
 }
 
-.settings-button:nth-child(1) {
+.settings-button:nth-child(1) { /* X */
     border-radius: 10px 10px 0 0;
 }
-.settings-button {
+.settings-button { /* X */
     background-color: var(--background-lighter);
 
     text-align: center;
@@ -52,20 +52,20 @@
     user-select: none;
     transition: 0.1s ease-in-out;
 }
-.settings-button:hover {
+.settings-button:hover { /* X */
     filter: brightness(1.1);
-} .settings-button:active {
+} .settings-button:active { /* X */
     filter: brightness(1.2);
 }
 
-.settings-content {
+.settings-content { /* X */
     display: none;
     flex-direction: column;
 }
-.settings-content[active] {
+.settings-content[active] { /* X */
     display: flex;
 }
-.settings-content-div {
+.settings-content-div { /* X */
     display: flex;
     flex-direction: column;
 
@@ -74,24 +74,24 @@
     width: 100%;
     height: 3em;
 }
-.settings-content-div > div {
+.settings-content-div > div {  /* X */
     border-bottom: 1px solid var(--background-lighter);
     padding: 10px 0;
 }
 
-.settings-content-div-key-value {
+.settings-content-div-key-value { /* X */
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
-.settings-content-key, .settings-content-value {
+.settings-content-key, .settings-content-value { /* X */
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
 }
-.settings-content-value button#toggleHideAPI {
+.settings-content-value button#toggleHideAPI { /* X */
     background-color: var(--border);
     color: var(--text);
 
@@ -108,30 +108,30 @@
     transform: translate(-30%, -50%);
     transition: 0.2s;
 }
-.settings-content-value button#toggleHideAPI:hover {
+.settings-content-value button#toggleHideAPI:hover { /* X */
     filter: brightness(1.1);
-} .settings-content-value button#toggleHideAPI:active {
+} .settings-content-value button#toggleHideAPI:active { /* X */
     filter: brightness(1.5);
 }
 
-.settings-content-key {
+.settings-content-key { /* X */
     flex: 40%;
 }
-.settings-content-value {
+.settings-content-value { /* X */
     flex: 60%;
 }
 
-.settings-content-value span {
+.settings-content-value span { /* X */
     padding: 0 5px;
 }
 
-.settings-content-value input {
+.settings-content-value input { /* X */
     width: 100%;
 }
-.settings-content-key label {
+.settings-content-key label { /* X */
     text-align: center;
 }
-.settings-content-input {
+.settings-content-input { /* X */
     background-color: var(--background-lighter);
     color: var(--text);
 
@@ -140,7 +140,7 @@
     border: none;
     border-radius: 1em;
 }
-.settings-button-choice {
+.settings-button-choice { /* X */
     background-color: var(--background-lighter);
     color: var(--text);
 
@@ -154,19 +154,19 @@
     cursor: pointer;
     transition: 0.1s ease-in;
 }
-.settings-button-choice:hover {
+.settings-button-choice:hover { /* X */
     filter: brightness(1.05);
 }
-.settings-button-choice[active-currently] {
+.settings-button-choice[active-currently] { /* X */
     filter: brightness(0.9);
     outline: solid 1px var(--accent);
 }
-.settings-content-label {
+.settings-content-label { /* X */
     width: 30%;
     text-align: center;
 }
 
-.settings-theme-button {
+.settings-theme-button { /* X */
     padding: 5px;
 
     border: none;
@@ -176,32 +176,32 @@
     cursor: pointer;
     transition: 0.1s;
 }
-.settings-theme-button:hover {
+.settings-theme-button:hover { /* X */
     filter: brightness(1.2);
 }
-.settings-theme-button#tn {
+.settings-theme-button#tn { /* X */
     background-color: #1a1b26;
     color: #a9b1d6;
 }
-.settings-theme-button#n {
+.settings-theme-button#n { /* X */
     background-color: #2e3440;
     color: #eceff4;
 }
-.settings-theme-button#g {
+.settings-theme-button#g { /* X */
     background-color: #282828;
     color: #ebdbb2;
 }
-.settings-theme-button#sl {
+.settings-theme-button#sl { /* X */
     background-color: #fdf6e3;
     color: #657b83;
 }
 
-.settings-exit {
+.settings-exit { /* X */
     display: flex;
     justify-content: end;
 }
 
-.settings-right-exit {
+.settings-right-exit { /* X */
     width: 1.5em;
     height: 1.5em;
     border-radius: 0.2em;
@@ -212,12 +212,12 @@
 
     transition: 0.2s;
 }
-.settings-right-exit:hover {
+.settings-right-exit:hover { /* X */
     background-color: var(--background-lighter);
     filter: brightness(1.5);
 }
 
-.settings-save-div {
+.settings-save-div { /* X */
     display: flex;
     width: 100%;
     justify-content: end;
@@ -226,7 +226,7 @@
     bottom: 0;
 }
 
-.settings-save-button {
+.settings-save-button { /* X */
     background-color: var(--background-main);
     color: var(--text);
     border: none;
@@ -236,12 +236,12 @@
 
     filter: brightness(0.5);
 }
-.settings-save-button[active]:hover {
+.settings-save-button[active]:hover { /* X */
     filter: brightness(0.8);
-}.settings-save-button[active]:active {
+}.settings-save-button[active]:active { /* X */
     filter: brightness(0.6);
 }
-.settings-save-button[active] {
+.settings-save-button[active] { /* X */
     filter: brightness(1);
     cursor: pointer;
 }
