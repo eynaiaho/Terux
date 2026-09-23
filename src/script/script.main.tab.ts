@@ -23,7 +23,7 @@ export const createTabDOM = (title: string, src: string) => {
     tabLogoIMG.src = src;
 
     const tabTitle = document.createElement("div");
-    tabTitle.className = "custom-tab-title";
+    tabTitle.className = "custom-tab-title text-(--text)";
     tabTitle.textContent = title;
 
     const tabClose = document.createElement("div");

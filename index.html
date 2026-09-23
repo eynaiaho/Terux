@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="./src/style/fonts.css">
     <link rel="stylesheet" href="./src/style/colors.css">
     <link rel="stylesheet" href="./src/style/tw.css">
-    <!--
     <link rel="stylesheet" href="./src/style/style.main.css">
+    <!--
+    
     <link rel="stylesheet" href="./src/style/settings.css">
     -->
 
@@ -27,7 +28,7 @@
                 <div>
                     <img src="/icons/terux_mini.png" alt="Terux Icon" class="h-5 w-auto ml-[5px]">
                 </div>
-                <div class="flex items-center">Terux</div>
+                <div class="flex items-center text-(--text)">Terux</div>
             </div>
             <div class="flex items-center max-h-10">
                 <div class="text-(--muted-text) select-none opacity-50">$> Progressing - Smart Terminal</div>
@@ -55,7 +56,7 @@
             </div>
         </div>
         <!-- TERMINAL BODY -->
-        <div class="grow flex flex-col mt-[0.5em] ml-2.5 max-h-[calc(100vh - 60px - 0.5em)] min-h-0 hidden [&[active]]:flex" active>
+        <div id="terminalBody" class="grow flex flex-col mt-[0.5em] ml-2.5 max-h-[calc(100vh - 60px - 0.5em)] min-h-0 hidden [&[active]]:flex" active>
             <div class="flex flex-row justify-between">
                 <div class="flex flex-row overflow-hidden w-full flex-1">
                     <div class="flex flex-row min-w-0">
@@ -73,7 +74,7 @@
                 </div>
                 <div class="flex flex-row">
                     <div class="body-navs-ai flex items-center transition-[filter] duration-[0.5s]" id="smartButton">
-                        <svg xmlns="http://w3.org" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)" class="w-[30px] h-[30px] cursor-pointer transition-[filter 0.3s, transform 0.7s] ease-in-out hover:brightness-[1.2] drop-shadow-[0_0_0.75rem_var(--cursor-color)]">
+                        <svg xmlns="http://w3.org" width="24" height="24" viewBox="0 0 24 24" fill="var(--accent)" class="w-[30px] h-[30px] cursor-pointer transition-[filter_0.3s,transform_0.7s] ease-in-out hover:brightness-[1.2] hover:drop-shadow-[0_0_0.75rem_var(--cursor-color)]">
                             <path d="M13 10h7l-9 13v-9H4l9-13z" />
                         </svg>
                     </div>
@@ -93,30 +94,30 @@
             </div>
         </div>
         <!-- TERMINAL FOOTER -->
-        <div class="footer hidden [&[active]]:flex">
+        <div id="terminalFooter" class="footer hidden [&[active]]:flex">
             <div class="footer-navs">
 
             </div>
         </div>
-        <div class="bg-[rgba(0, 0, 0, 0.5)] hidden absolute inset-0 z-[3]">
-            <div class="absolute top-[50%] left-[50%] translate-[-50%, -50%]">
-                <div class="relative">
-                    <input type="text" class="bg-(--background-main) text-(--text) hidden rounded-[8px] p-[1.5em] w-[70vw] text-[1em] pr-[100px] shadow-[0_5px_20px_rgba(0,0,0,0.5)] z-[5] hover:outline-0 focus:outline-0" id="aiDataInput" placeholder="I need a help for command!">
-                    <button class="bg-(--background-darker) text-(--text) border-none rounded-[6px] p-2.5 cursor-pointer duration-200 absolute top-[50%] right-0 translate-[-35%, -50%] hover:bg-(--background-lighter)" id="aiDataButton">Submit</button>
+        <div id="aiDiv" class="bg-[rgba(0,0,0,0.5)] hidden absolute inset-0 z-[3]">
+            <div id="aiCenterDiv" class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2">
+                <div id="aiInputDiv" class="relative">
+                    <input type="text" class="bg-(--background-main) text-(--text) rounded-[8px] p-[1.5em] w-[70vw] text-[1em] pr-[100px] shadow-[0_5px_20px_rgba(0,0,0,0.5)] z-[5] hover:outline-0 focus:outline-0" id="aiDataInput" placeholder="I need a help for command!">
+                    <button class="bg-(--background-darker) text-(--text) border-none rounded-[6px] p-2.5 cursor-pointer duration-200 absolute top-[50%] right-0 -translate-x-[35%] -translate-y-1/2 hover:bg-(--background-lighter)" id="aiDataButton">Submit</button>
                 </div>
             </div>
         </div>
         <!-- TERMINAL SETTINGS -->
-        <div class="hidden justify-center items-center h-screen [&[active]]:flex">
+        <div id="terminalSettings" class="hidden justify-center items-center h-screen [&[active]]:flex">
             <div class="bg-(--background-darker) w-[90vw] h-[80vh] rounded-[12px] p-2.5">
                 <div class="flex flex-row justify-around h-full flex-[1_1_50%]">
                     <div class="w-full h-auto flex flex-col">
-                        <div class="bg-(--background-lighter) text-center font-bold text-[20px] leading-[3em] h-[3em] border-b-[1px] border-b-(--background-darker) cursor-pointer select-none duration-100 ease-in-out hover:brightness-[1.1] active:brightness-[1.2] first:rounded-t-[10px]" id="settingsUser">User Settings</div>
-                        <div class="bg-(--background-lighter) text-center font-bold text-[20px] leading-[3em] h-[3em] border-b-[1px] border-b-(--background-darker) cursor-pointer select-none duration-100 ease-in-out hover:brightness-[1.1] active:brightness-[1.2]" id="settingsAI">AI Settings</div>
+                        <div class="bg-(--background-lighter) text-center font-bold text-[20px] leading-[3em] h-[3em] border-b-[1px] border-b-(--background-darker) cursor-pointer select-none duration-100 ease-in-out hover:brightness-110 active:brightness-125 first:rounded-t-[10px]" id="settingsUser">User Settings</div>
+                        <div class="bg-(--background-lighter) text-center font-bold text-[20px] leading-[3em] h-[3em] border-b-[1px] border-b-(--background-darker) cursor-pointer select-none duration-100 ease-in-out hover:brightness-110 active:brightness-125" id="settingsAI">AI Settings</div>
                     </div>
                     <div class="w-full h-auto border-l-[1px] border-l-[var(--background-main)] relative">
                         <div class="flex justify-end">
-                            <div class="w-[1.5em] h-[1.5em] rounded-[0.2em] text-[1.4em] text-center leading-[1.5em] cursor-pointer duration-200 hover:bg-(--background-lighter) hover:brightness-[1.5]" id="exitSettings">
+                            <div class="flex justify-center w-[1.5em] h-[1.5em] rounded-[0.2em] text-[1.4em] text-center items-center cursor-pointer duration-200 hover:bg-(--background-lighter) hover:brightness-[1.5]" id="exitSettings">
                                 <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                     stroke-linejoin="round">
@@ -126,48 +127,48 @@
                             </div>
                         </div>
 
-                        <div class="settings-content-users hidden flex-col [&[active]]:flex" active>
+                        <div id="settingsContentUser" class="settings-content-users hidden flex-col [&[active]]:flex" active>
                             <div class="flex flex-col border-b-[1px] border-b-(--background-darker) w-full h-[3em]">
                                 <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5 px-0">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editAlias"
                                             class="w-[30%] text-center text-center">Your Alias</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]"><input type="text"
-                                            class="bg-(--background-lighter) text-(--text) p-2.5 hidden rounded-[1em] settings-change w-full" id="userAliasInput"></div>
+                                            class="bg-(--background-lighter) text-(--text) p-2.5 rounded-[1em] settings-change w-full" id="userAliasInput"></div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5 px-0">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editAlias"
                                             class="w-[30%] text-center text-center">Your theme</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]">
                                         <div style="display:flex;flex-direction:row;gap: 0.5em;">
                                             <button id="tn"
-                                                class="bg-[#1a1b26] text-[#a9b1d6] p-[5px] border-none rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-change settings-theme-button">Tokyo
+                                                class="text-sm bg-[#1a1b26] text-[#a9b1d6] p-[5px] rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-change settings-theme-button">Tokyo
                                                 Night</button>
                                             <button id="n"
-                                                class="bg-[#2e3440] text-[#eceff4] p-[5px] border-none rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Nord</button>
+                                                class="text-sm bg-[#2e3440] text-[#eceff4] p-[5px] rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Nord</button>
                                             <button id="g"
-                                                class="bg-[#282828] text-[#ebdbb2] p-[5px] border-none rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Gruvbox</button>
+                                                class="text-sm bg-[#282828] text-[#ebdbb2] p-[5px] rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Gruvbox</button>
                                             <button id="sl"
-                                                class="bg-[#fdf6e3] text-[#657b83] p-[5px] border-none rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Solarized
+                                                class="text-sm bg-[#fdf6e3] text-[#657b83] p-[5px] rounded-[7px] select-none cursor-pointer duration-100 hover:brightness-[1.2] border-none m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent) settings-theme-button">Solarized
                                                 Light</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5 px-0">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editAlias"
                                             class="w-[30%] text-center text-center">Your font</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]">
                                         <div style="display:flex;flex-direction:row;gap: 0.5em;">
-                                            <button id="jbm" class="settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
+                                            <button id="jbm" class="text-sm settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
                                                 style="font-family: 'JetBrains Mono';">JetBrains
                                                 Mono</button>
-                                            <button id="fc" class="settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
+                                            <button id="fc" class="text-sm settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
                                                 style="font-family: 'Fira Code';">Fira Code</button>
-                                            <button id="cc" class="settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
+                                            <button id="cc" class="text-sm settings-font-button bg-(--background-lighter) text-(--text) border-none rounded-[7px] p-[5px] m-[2px] select-none cursor-pointer duration-100 ease-in hover:brightness-[1.05] [&[active-currently]]:brightness-[0.9] [&[active-currently]]:outline-[1px] [&[active-currently]]:outline-(--accent)"
                                                 style="font-family: 'Cascadia Code';">Cascadia Code</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5 px-0">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editAlias"
                                             class="w-[30%] text-center text-center">telemetry</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]">
@@ -185,37 +186,37 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="settings-content-ai settings-content">
+                        <div id="settingsContentAi" class="settings-content-ai settings-content hidden [&[active]]:flex">
                             <div class="flex flex-col border-b-[1px] border-b-(--background-darker) w-full h-[3em]">
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editAPI"
                                             class="w-[30%] text-center text-center">Your API</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]">
-                                        <input type="password" class="bg-(--background-lighter) text-(--text) p-2.5 hidden rounded-[1em] settings-change w-full"
+                                        <input type="password" class="bg-(--background-lighter) text-(--text) p-2.5 rounded-[1em] settings-change w-full"
                                             id="aiApiInput" name="editAPI">
-                                        <button id="toggleHideAPI" class="bg-(--border) text-(--text) hidden rounded-[5px] cursor-pointer h-[2em] w-[2em] absolute right-0 top-[50%] translate-[-30%, -50%] duration-200 hover:brightness-[1.1] active:brightness-[1.5]">?</button>
+                                        <button id="toggleHideAPI" class="bg-(--border) text-(--text) rounded-[5px] cursor-pointer h-[2em] w-[2em] absolute right-0 top-[50%] -translate-x-[30%] -translate-y-1/2 duration-200 hover:brightness-[1.1] active:brightness-[1.5]">?</button>
                                     </div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editModel"
                                             class="w-[30%] text-center text-center">Your Model</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]"><input type="text"
-                                            class="bg-(--background-lighter) text-(--text) p-2.5 hidden rounded-[1em] settings-change w-full" id="aiModelInput"
+                                            class="bg-(--background-lighter) text-(--text) p-2.5 rounded-[1em] settings-change w-full" id="aiModelInput"
                                             name="editModel"></div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editService"
                                             class="w-[30%] text-center text-center">Your Service</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]"><input type="text"
-                                            class="bg-(--background-lighter) text-(--text) p-2.5 hidden rounded-[1em] settings-change w-full" id="aiServiceInput"
+                                            class="bg-(--background-lighter) text-(--text) p-2.5 rounded-[1em] settings-change w-full" id="aiServiceInput"
                                             name="editService"></div>
                                 </div>
-                                <div class="flex flex-row justify-around">
+                                <div class="flex flex-row justify-around border-b-[1px] border-b-(--background-lighter) py-2.5">
                                     <div class="w-full flex items-center justify-center relative flex-[40%]"><label for="editService"
                                             class="w-[30%] text-center text-center">Local API</label></div>
                                     <div class="w-full flex items-center justify-center relative flex-[60%]"><input type="text"
-                                            class="bg-(--background-lighter) text-(--text) p-2.5 hidden rounded-[1em] settings-change w-full" id="aiServiceInput"
-                                            name="editService"></div>
+                                            class="bg-(--background-lighter) text-(--text) p-2.5 rounded-[1em] settings-change w-full" id="aiServiceInput"
+                                            name="editService" readonly placeholder="Not Working"></div>
                                 </div>
                                 <span style="margin: 10px 0;font-size: 12px;user-select: none;">
                                     After saving critical settings such as alias, telemetry, API, model, and service,
@@ -225,7 +226,7 @@
                         </div>
 
                         <div class="flex w-full justify-end absolute right-0 bottom-0" id="settingsSaveDiv">
-                            <button class="bg-(--background-main) text-(--text) border-none rounded-[7px] select-none brightness-[0.5] [&[active]]:hover:brightness-[0.8] [&[active]]:active:brightness-[0.6] [&[active]]:brightness-[1] [&[active]]:cursor-pointer" id="settingsSubmit">Save the Changes</button>
+                            <button class="bg-(--background-main) text-(--text) border-none rounded-[7px] p-[7px] select-none brightness-[0.5] [&[active]]:hover:brightness-[0.8] [&[active]]:active:brightness-[0.6] [&[active]]:brightness-[1] [&[active]]:cursor-pointer" id="settingsSubmit">Save the Changes</button>
                         </div>
                     </div>
                 </div>

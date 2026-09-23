@@ -59,9 +59,11 @@ export const changeMenu = (menu: HTMLElement, div: Object) => {
 
 export const changeAIMenu = (status: boolean) => {
     if (status === true) {
-        aiDivMenu.div.style.display = "flex";
+        aiDivMenu.div.classList.add("flex");
+        aiDivMenu.div.classList.remove("hidden");
     } else {
-        aiDivMenu.div.style.display = "none";
+        aiDivMenu.div.classList.add("hidden");
+        aiDivMenu.div.classList.remove("flex");
         aiDivMenu.input.value = "";
     }
 }
@@ -69,10 +71,12 @@ export const changeAIMenu = (status: boolean) => {
 export const smartMode = (status: boolean) => {
     setSmartStatus(status);
     if (SMART_STATUS && aiDivMenu.smart_button) {
-        aiDivMenu.smart_button.style.filter = "brightness(1.4)";
+        aiDivMenu.smart_button.classList.add("brightness(1.4)");
+        aiDivMenu.smart_button.classList.remove("brightness(1)");
         changeAIMenu(true);
     } else if (aiDivMenu.smart_button) {
-        aiDivMenu.smart_button.style.filter = "brightness(1)";
+        aiDivMenu.smart_button.classList.add("brightness(1.1)");
+        aiDivMenu.smart_button.classList.remove("brightness(1.4)");
         changeAIMenu(false);
     }
 }

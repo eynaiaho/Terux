@@ -42,7 +42,7 @@ window.addEventListener('keydown', (e) => {
 });
 */
 
-addListener("wheel", ".body-tabs", (event) => {
+addListener("wheel", "#bodyTabs", (event) => {
     event.preventDefault();
     const element = findElement("#bodyTabs");
     if (!element) return;
@@ -51,7 +51,7 @@ addListener("wheel", ".body-tabs", (event) => {
 
 // AI Mode
 
-addListener("click", ".ai-div", (event) => {
+addListener("click", "#aiDiv", (event) => {
     if(event.target === event.currentTarget) {
         smartMode(false);
     }

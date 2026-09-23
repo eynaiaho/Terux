@@ -57,9 +57,9 @@ interface DivMenu {
     footer: HTMLDivElement
 }
 const divMenu: DivMenu = {
-    terminal: document.querySelector(".body")!,
-    settings: document.querySelector(".settings")!,
-    footer: document.querySelector(".footer")!
+    terminal: document.querySelector("#terminalBody")!,
+    settings: document.querySelector("#terminalSettings")!,
+    footer: document.querySelector("#terminalFooter")!
 }
 
 interface AIDivMenu {
@@ -70,8 +70,8 @@ interface AIDivMenu {
     smart_button: HTMLButtonElement
 }
 const aiDivMenu: AIDivMenu = {
-    div: document.querySelector(".ai-div")!,
-    center_div: document.querySelector(".ai-center-div")!,
+    div: document.querySelector("#aiDiv")!,
+    center_div: document.querySelector("#aiCenterDiv")!,
     input: document.querySelector("#aiDataInput")!,
     button: document.querySelector("#aiDataButton")!,
     smart_button: document.querySelector("#smartButton")!,
@@ -135,8 +135,8 @@ const divSettingsMenu: DivSettingsMenu = {
         save_button: document.querySelector("#settingsSubmit")!
     },
     divs: {
-        users_div: document.querySelector(".settings-content-users")!,
-        ai_div: document.querySelector(".settings-content-ai")!
+        users_div: document.querySelector("#settingsContentUser")!,
+        ai_div: document.querySelector("#settingsContentAi")!
     }
 }
 
