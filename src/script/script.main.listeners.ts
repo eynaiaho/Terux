@@ -102,7 +102,7 @@ addListener("click", "#settingsSubmit", async (event) => {
     if (!divSettingsMenu.buttons.save_button.hasAttribute("active")) return;
     const data = settingsToObject();
     if (JSON.stringify(data) === JSON.stringify(GLOBAL_USER_CONFIG)) {
-        divSettingsMenu.buttons.save_button.removeAttribute("active");
+        divSettingsMenu.buttons.save_button.removeAttribute("active");;
         return;
     };
     await saveSettings(data);
