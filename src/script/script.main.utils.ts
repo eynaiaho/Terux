@@ -126,10 +126,14 @@ export const loadSettings = (userConfig: any) => {
     const currentApi = userConfig.ai.api;
     const currentModel = userConfig.ai.model;
     const currentService = userConfig.ai.service;
+    const currentSource = userConfig.ai.source;
+
+    console.log(currentSource)
 
     aiDatas.ai_api_data.value = currentApi;
     aiDatas.ai_model_data.value = currentModel;
     aiDatas.ai_service_data.value = currentService;
+    aiDatas.ai_source_data.value = currentSource;
 }
 
 export const saveSettings = async (object: any) => {
@@ -147,6 +151,8 @@ export const settingsToObject = () => {
             api: aiDatas.ai_api_data.value,
             model: aiDatas.ai_model_data.value,
             service: aiDatas.ai_service_data.value,
+            source: aiDatas.ai_source_data.value,
+            temperature: 1.0
         },
         telemetry: userDatas.user_telemetry_status_data.checked as boolean,
         onboarding_complete: true

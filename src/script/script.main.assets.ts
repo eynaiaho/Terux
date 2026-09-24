@@ -99,7 +99,8 @@ interface DivSettingsMenu {
         ai_datas: {
             ai_api_data: HTMLInputElement,
             ai_model_data: HTMLInputElement,
-            ai_service_data: HTMLInputElement
+            ai_service_data: HTMLInputElement,
+            ai_source_data: HTMLInputElement
         },
         save_button: HTMLButtonElement
     },
@@ -130,7 +131,8 @@ const divSettingsMenu: DivSettingsMenu = {
         ai_datas: {
             ai_api_data: document.querySelector("#aiApiInput")!,
             ai_model_data: document.querySelector("#aiModelInput")!,
-            ai_service_data: document.querySelector("#aiServiceInput")!
+            ai_service_data: document.querySelector("#aiServiceInput")!,
+            ai_source_data: document.querySelector("#aiSourceInput")!
         },
         save_button: document.querySelector("#settingsSubmit")!
     },

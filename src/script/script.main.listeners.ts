@@ -101,11 +101,14 @@ addListener("click", "#settingsAI", (event) => { // OPEN AI SETTINGS
 addListener("click", "#settingsSubmit", async (event) => {
     if (!divSettingsMenu.buttons.save_button.hasAttribute("active")) return;
     const data = settingsToObject();
+    console.log(data);
     if (JSON.stringify(data) === JSON.stringify(GLOBAL_USER_CONFIG)) {
         divSettingsMenu.buttons.save_button.removeAttribute("active");;
         return;
     };
+    console.log("saveSettings");
     await saveSettings(data);
+    console.log("saveSettings geçti | reload");
     window.location.reload();
 });
 
