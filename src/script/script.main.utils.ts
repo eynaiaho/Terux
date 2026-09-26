@@ -128,8 +128,6 @@ export const loadSettings = (userConfig: any) => {
     const currentService = userConfig.ai.service;
     const currentSource = userConfig.ai.source;
 
-    console.log(currentSource)
-
     aiDatas.ai_api_data.value = currentApi;
     aiDatas.ai_model_data.value = currentModel;
     aiDatas.ai_service_data.value = currentService;

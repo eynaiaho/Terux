@@ -193,17 +193,14 @@ const sendError = (data: string, status: boolean = true) => {
 buttons.forEach(button => {
     button?.addEventListener("click", (event) => {
         const target = event.target as HTMLElement;
-        console.log(target);
         if (!target) return;
         const bodyQ = target?.closest(".body-q");
         if (!bodyQ) return;
-        console.log(bodyQ);
 
         const bodyQNumber = bodyQ.getAttribute("data-q") || "";
         if (!bodyQNumber) return;
         const bodyQNextNumber = (Number(bodyQ.getAttribute("data-q")) + 1).toString();
         const pass = getSubmits(bodyQNumber, bodyQNextNumber);
-        console.log(bodyQNumber);
         if (pass === false) {
             sendError("Missing required fields. Please fill out all inputs.");
             return;
@@ -220,17 +217,14 @@ buttons.forEach(button => {
 document.addEventListener("keydown", (event) => {
     if(event.key === "Enter") {
         const target = event.target as HTMLElement;
-        console.log(target);
         if (!target) return;
         const bodyQ = target?.closest(".body-q");
         if (!bodyQ) return;
-        console.log(bodyQ);
 
         const bodyQNumber = bodyQ.getAttribute("data-q") || "";
         if (!bodyQNumber) return;
         const bodyQNextNumber = (Number(bodyQ.getAttribute("data-q")) + 1).toString();
         const pass = getSubmits(bodyQNumber, bodyQNextNumber);
-        console.log(bodyQNumber);
         if (pass === false) {
             sendError("Missing required fields. Please fill out all inputs.");
             return;

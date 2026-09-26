@@ -58,8 +58,8 @@ listen("terminal_error", async (error) => {
     try {
         const response = await invoke("ask_ai", { data: `Read the error message the user received and issue the correct command to prevent the error from recurring. Current Error Message: ${error.payload}` });
         showPlaceholder(response as string);
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
     }
 });
 
@@ -93,7 +93,6 @@ term.onData(async (data) => {
             return;
         }
     }
-    console.log(data);
     await invoke("inject_str", { data: data });
 });
 
