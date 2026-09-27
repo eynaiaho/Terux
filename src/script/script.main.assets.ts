@@ -94,14 +94,29 @@ interface DivSettingsMenu {
                 fc: HTMLButtonElement,
                 cc: HTMLButtonElement,
             },
+            user_ai_datas: {
+                cloud_ai: HTMLButtonElement,
+                local_ai: HTMLButtonElement
+            },
             user_telemetry_status_data: HTMLInputElement
         },
         ai_datas: {
-            ai_api_data: HTMLInputElement,
-            ai_model_data: HTMLInputElement,
-            ai_service_data: HTMLInputElement,
-            ai_source_data: HTMLInputElement
+            cloud_ai: {
+                ai_api_data: HTMLInputElement,
+                ai_model_data: HTMLInputElement,
+                ai_service_data: HTMLInputElement,
+                ai_temperature_data: HTMLInputElement,
+            },
+            local_ai: {
+                ai_source_data: HTMLInputElement,
+                ai_model_data: HTMLInputElement,
+                ai_temperature_data: HTMLInputElement
+            }
         },
+        ai_menus: {
+            cloud_ai: HTMLDivElement,
+            local_ai: HTMLDivElement
+        }
         save_button: HTMLButtonElement
     },
     divs: {
@@ -126,20 +141,35 @@ const divSettingsMenu: DivSettingsMenu = {
                 fc: document.querySelector("#fc")!,
                 cc: document.querySelector("#cc")!,
             },
+            user_ai_datas: {
+                cloud_ai: document.querySelector("#cloud_ai")!,
+                local_ai: document.querySelector("#local_ai")!,
+            },
             user_telemetry_status_data: document.querySelector("#telemetryCheckbox")!
         },
         ai_datas: {
-            ai_api_data: document.querySelector("#aiApiInput")!,
-            ai_model_data: document.querySelector("#aiModelInput")!,
-            ai_service_data: document.querySelector("#aiServiceInput")!,
-            ai_source_data: document.querySelector("#aiSourceInput")!
+            cloud_ai: {
+                ai_api_data: document.querySelector("#cloudaiApiInput")!,
+                ai_model_data: document.querySelector("#cloudaiModelInput")!,
+                ai_service_data: document.querySelector("#cloudaiServiceInput")!,
+                ai_temperature_data: document.querySelector("#cloudaiTemperatureInput")!
+            },
+            local_ai: {
+                ai_source_data: document.querySelector("#localaiSourceInput")!,
+                ai_model_data: document.querySelector("#localaiModelInput")!,
+                ai_temperature_data: document.querySelector("#localaiTemperatureInput")!
+            }
+        },
+        ai_menus: {
+            cloud_ai: document.querySelector(".cloud-ai")!,
+            local_ai: document.querySelector(".local-ai")!
         },
         save_button: document.querySelector("#settingsSubmit")!
     },
     divs: {
         users_div: document.querySelector("#settingsContentUser")!,
-        ai_div: document.querySelector("#settingsContentAi")!
+        ai_div: document.querySelector("#settingsContentAi")!,
     }
 }
 
-export {TAB_ADD_ICON_SVG, TAB_CLOSE_ICON_SVG, MENU_AI_ICON_SVG, MENU_SETTINGS_ICON_SVG, CLOSE_ICON_SVG, HIDE_ICON_SVG, SCREEN_ICON_SVG, divMenu, divSettingsMenu, aiDivMenu};
+export { TAB_ADD_ICON_SVG, TAB_CLOSE_ICON_SVG, MENU_AI_ICON_SVG, MENU_SETTINGS_ICON_SVG, CLOSE_ICON_SVG, HIDE_ICON_SVG, SCREEN_ICON_SVG, divMenu, divSettingsMenu, aiDivMenu };

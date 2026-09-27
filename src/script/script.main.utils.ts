@@ -116,22 +116,32 @@ export const loadSettings = (userConfig: any) => {
     const currentAlias = userConfig.alias;
     const currentTheme = userConfig.theme;
     const currentFont = userConfig.font;
+    const currentAi = userConfig.ai.active_mode;
     const currentTelemetry = userConfig.telemetry;
 
     userDatas.user_alias_data.value = currentAlias;
     userDatas.user_theme_datas[currentTheme as keyof typeof userDatas.user_theme_datas].setAttribute("active-currently", "");
     userDatas.user_font_datas[currentFont as keyof typeof userDatas.user_font_datas].setAttribute("active-currently", "");
+    userDatas.user_ai_datas[currentAi as keyof typeof userDatas.user_ai_datas].setAttribute("active-currently", "");
     userDatas.user_telemetry_status_data.checked = currentTelemetry as boolean;
 
-    const currentApi = userConfig.ai.api;
-    const currentModel = userConfig.ai.model;
-    const currentService = userConfig.ai.service;
-    const currentSource = userConfig.ai.source;
+    const currentCloudApi = userConfig.ai.cloud_ai.api;
+    const currentCloudModel = userConfig.ai.cloud_ai.model;
+    const currentCloudService = userConfig.ai.cloud_ai.service;
+    const currentCloudTemperature = userConfig.ai.cloud_ai.temperature;
 
-    aiDatas.ai_api_data.value = currentApi;
-    aiDatas.ai_model_data.value = currentModel;
-    aiDatas.ai_service_data.value = currentService;
-    aiDatas.ai_source_data.value = currentSource;
+    const currentLocalSource = userConfig.ai.local_ai.source;
+    const currentLocalModel = userConfig.ai.local_ai.model;
+    const currentLocalTemperature = userConfig.ai.local_ai.temperature;
+
+    aiDatas.cloud_ai.ai_api_data.value = currentCloudApi;
+    aiDatas.cloud_ai.ai_model_data.value = currentCloudModel;
+    aiDatas.cloud_ai.ai_service_data.value = currentCloudService;
+    aiDatas.cloud_ai.ai_temperature_data.value = currentCloudTemperature.toFixed(1);
+
+    aiDatas.local_ai.ai_source_data.value = currentLocalSource;
+    aiDatas.local_ai.ai_model_data.value = currentLocalModel;
+    aiDatas.local_ai.ai_temperature_data.value = currentLocalTemperature.toFixed(1);
 }
 
 export const saveSettings = async (object: any) => {
@@ -146,11 +156,18 @@ export const settingsToObject = () => {
         theme: findElement(".settings-theme-button[active-currently]")?.id,
         font: findElement(".settings-font-button[active-currently]")?.id,
         ai: {
-            api: aiDatas.ai_api_data.value,
-            model: aiDatas.ai_model_data.value,
-            service: aiDatas.ai_service_data.value,
-            source: aiDatas.ai_source_data.value,
-            temperature: 1.0
+            active_mode: findElement(".settings-ai-button[active-currently]")?.id,
+            cloud_ai: {
+                api: aiDatas.cloud_ai.ai_api_data.value,
+                model: aiDatas.cloud_ai.ai_model_data.value,
+                service: aiDatas.cloud_ai.ai_service_data.value,
+                temperature: Number(aiDatas.cloud_ai.ai_temperature_data.value)
+            },
+            local_ai: {
+                source: aiDatas.local_ai.ai_source_data.value,
+                model: aiDatas.local_ai.ai_model_data.value,
+                temperature: Number(aiDatas.local_ai.ai_temperature_data.value)
+            }
         },
         telemetry: userDatas.user_telemetry_status_data.checked as boolean,
         onboarding_complete: true
@@ -161,16 +178,16 @@ export const settingsToObject = () => {
 export const toggleHideShow = () => {
     let should_show: boolean = false;
     let element = findElement("#toggleHideAPI") as HTMLButtonElement;
-    if(!element) console.error("Cannot find toggleHideAPI");
+    if (!element) console.error("Cannot find toggleHideAPI");
 
     return function () {
         should_show = !should_show;
-        if(should_show === true) {
-            divSettingsMenu.buttons.ai_datas.ai_api_data.type = "text";
+        if (should_show === true) {
+            divSettingsMenu.buttons.ai_datas.cloud_ai.ai_api_data.type = "text";
             element.textContent = "=";
             element.style.opacity = "0.5";
         } else {
-            divSettingsMenu.buttons.ai_datas.ai_api_data.type = "password";
+            divSettingsMenu.buttons.ai_datas.cloud_ai.ai_api_data.type = "password";
             element.textContent = "?";
             element.style.opacity = "1";
         }

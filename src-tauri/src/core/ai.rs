@@ -17,15 +17,15 @@ pub async fn start_ai(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let current_service: LLMBackend = {
         let mut service: LLMBackend = LLMBackend::Anthropic;
-        if ai.service == "Gemini" {
+        if ai.cloud_ai.service == "Gemini" {
             service = LLMBackend::Google;
-        } else if ai.service == "Groq" {
+        } else if ai.cloud_ai.service == "Groq" {
             service = LLMBackend::Groq;
-        } else if ai.service == "Claude" {
+        } else if ai.cloud_ai.service == "Claude" {
             service = LLMBackend::Anthropic;
-        } else if ai.service == "DeepSeek" {
+        } else if ai.cloud_ai.service == "DeepSeek" {
             service = LLMBackend::DeepSeek;
-        } else if ai.service == "Ollama" {
+        } else if ai.cloud_ai.service == "Ollama" {
             service = LLMBackend::Ollama;
         }
         service
@@ -42,13 +42,12 @@ pub async fn start_ai(
 
     let mut builder = LLMBuilder::new()
         .backend(current_service)
-        .model(ai.model)
         .system(system_command);
 
-    if ai.service == "Ollama" {
-        builder = builder.base_url(ai.source).temperature(0.0);
+    if ai.active_mode == "local_ai" {
+        builder = builder.model(ai.local_ai.model).base_url(ai.local_ai.source).temperature(ai.local_ai.temperature);
     } else {
-        builder = builder.api_key(ai.api);
+        builder = builder.model(ai.cloud_ai.model).api_key(ai.cloud_ai.api).temperature(ai.cloud_ai.temperature);
     }
 
     let raw_llm = builder.build().unwrap();

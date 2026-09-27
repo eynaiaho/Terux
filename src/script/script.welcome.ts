@@ -13,38 +13,64 @@ const buttons = [
 ];
 
 interface AiInputs {
-    apiInput: HTMLInputElement;
-    modelInput: HTMLInputElement;
-    serviceInput: HTMLInputElement
+    cloud_ai: {
+        apiInput: HTMLInputElement;
+        modelInput: HTMLInputElement;
+        serviceInput: HTMLInputElement;
+        temperatureInput: HTMLInputElement
+    },
+    local_ai: {
+        sourceInput: HTMLInputElement;
+        modelInput: HTMLInputElement;
+        temperatureInput: HTMLInputElement
+    }
+}
+
+interface AiMenus {
+    cloud_ai: NodeListOf<HTMLElement>;
+    local_ai: NodeListOf<HTMLElement>;
 }
 
 interface UserSettings {
     alias: string;
     theme: string;
     font: string;
-    ai: {
-        api: string;
-        model: string;
-        service: string;
-        source: string;
-        temperature: number;
-    };
+    ai: Ai;
     telemetry: boolean;
     onboarding_complete: boolean;
 }
 
-interface AiObject {
+interface Ai {
+    active_mode: string;
+    local_ai: LocalAi;
+    cloud_ai: CloudAi;
+}
+
+interface LocalAi {
+    source: string;
+    model: string;
+    temperature: number;
+}
+
+interface CloudAi {
     api: string;
     model: string;
     service: string;
-    source: string;
     temperature: number;
 }
 
 const aiInputs: AiInputs = {
-    apiInput: document.getElementById("aiApiInput") as HTMLInputElement,
-    modelInput: document.getElementById("aiModelInput") as HTMLInputElement,
-    serviceInput: document.getElementById("aiServiceInput") as HTMLInputElement
+    cloud_ai: {
+        apiInput: document.getElementById("cloudaiApiInput") as HTMLInputElement,
+        modelInput: document.getElementById("cloudaiModelInput") as HTMLInputElement,
+        serviceInput: document.getElementById("cloudaiServiceInput") as HTMLInputElement,
+        temperatureInput: document.getElementById("cloudaiTemperatureInput") as HTMLInputElement
+    },
+    local_ai: {
+        sourceInput: document.getElementById("localaiSourceInput") as HTMLInputElement,
+        modelInput: document.getElementById("localaiModelInput") as HTMLInputElement,
+        temperatureInput: document.getElementById("localaiTemperatureInput") as HTMLInputElement
+    }
 }
 
 const userSettings: UserSettings = {
@@ -52,11 +78,18 @@ const userSettings: UserSettings = {
     "theme": "",
     "font": "",
     "ai": {
-        "api": "",
-        "model": "",
-        "service": "",
-        "source": "",
-        "temperature": 0.0
+        "active_mode": "",
+        "local_ai": {
+            "source": "",
+            "model": "",
+            "temperature": 0.0
+        },
+        "cloud_ai": {
+            "api": "",
+            "model": "",
+            "service": "",
+            "temperature": 0.0
+        }
     },
     "telemetry": false,
     "onboarding_complete": false
@@ -65,10 +98,82 @@ const userSettings: UserSettings = {
 let currentTheme: string = "";
 let currentFont: string = "";
 
+let currentCloudAiButton = "gemini";
+let currentLocalAiButton = "ollama";
+
+const ai_menus: AiMenus = {
+    cloud_ai: document.querySelectorAll(".cloud-ai")! as NodeListOf<HTMLElement>,
+    local_ai: document.querySelectorAll(".local-ai")! as NodeListOf<HTMLElement>
+}
+
+document.querySelectorAll(".terux_settings_menu_button").forEach(elements => {
+    elements.addEventListener("click", (event) => {
+        const id = (event.target as HTMLButtonElement).id;
+        const targetButton = id.split("_")[1];
+        if (targetButton === "Ci") {
+            selectMenuButton(currentCloudAiButton);
+            ai_menus.cloud_ai.forEach((element) => {
+                element.setAttribute("active", "");
+            });
+            ai_menus.local_ai.forEach((element) => {
+                element.removeAttribute("active");
+            });
+        } else if (targetButton === "La") {
+            selectMenuButton(currentLocalAiButton);
+            ai_menus.local_ai.forEach((element) => {
+                element.setAttribute("active", "");
+            });
+            ai_menus.cloud_ai.forEach((element) => {
+                element.removeAttribute("active");
+            });
+        }
+    });
+})
+
+const selectMenuButton = (id: string) => {
+    document.querySelectorAll('input[type="button"]').forEach(e => {
+        (e as HTMLElement).classList.remove("!brightness-50");
+    });
+    document.getElementById(id)?.classList.add("!brightness-50");
+}
+
+const updateAiInputPresets = (id: string) => {
+    switch (id) {
+        case "gemini":
+            aiInputs.cloud_ai.apiInput.value = "AIza";
+            aiInputs.cloud_ai.modelInput.placeholder = "gemini-3.1-flash-lite";
+            aiInputs.cloud_ai.serviceInput.value = "Gemini";
+            currentCloudAiButton = "gemini";
+            break;
+        case "claude":
+            aiInputs.cloud_ai.apiInput.value = "sk-ant-";
+            aiInputs.cloud_ai.modelInput.placeholder = "claude-3-haiku";
+            aiInputs.cloud_ai.serviceInput.value = "Claude";
+            currentCloudAiButton = "claude";
+            break;
+        case "groq":
+            aiInputs.cloud_ai.apiInput.value = "gsk_";
+            aiInputs.cloud_ai.modelInput.placeholder = "llama-3.1-8b-instant";
+            aiInputs.cloud_ai.serviceInput.value = "Groq";
+            currentCloudAiButton = "groq";
+            break;
+        case "deepseek":
+            aiInputs.cloud_ai.apiInput.value = "sk-";
+            aiInputs.cloud_ai.modelInput.placeholder = "deepseek-v4-flash";
+            aiInputs.cloud_ai.serviceInput.value = "DeepSeek";
+            currentCloudAiButton = "deepseek";
+            break;
+        case "ollama":
+            aiInputs.local_ai.sourceInput.placeholder = "http://localhost:11434";
+            aiInputs.local_ai.modelInput.placeholder = "Local AI Model Name";
+            currentLocalAiButton = "ollama";
+    }
+}
+
 document.querySelectorAll('input[type="button"]').forEach(element => {
     element.addEventListener("click", (event) => {
         if (!event.target) return;
-        
+
         if ((event.target as HTMLInputElement).closest(".theme")) {
             currentTheme = element.id;
         } else if ((event.target as HTMLInputElement).closest(".font")) {
@@ -104,24 +209,35 @@ const getFont = (): boolean | string => {
     return currentFont;
 }
 
-const getAI = (): boolean | AiObject => {
-    let api = aiInputs.apiInput.value;
-    if (!api) return false;
-    let model = aiInputs.modelInput.value;
-    if (!model) return false;
-    let service = aiInputs.serviceInput.value;
-    if (!service) return false;
-    let source = "";
-    if(service === "Ollama") {
-        source = api;api = "";
-    }
+const getAI = (): boolean | Ai => {
+    let cloude_api = aiInputs.cloud_ai.apiInput.value;
+    let cloude_model = aiInputs.cloud_ai.modelInput.value;
+    let cloude_service = aiInputs.cloud_ai.serviceInput.value;
+    let cloude_temperature = aiInputs.cloud_ai.temperatureInput.value;
 
-    const aiObject: AiObject = {
-        "api": api,
-        "model": model,
-        "service": service,
-        "source": source,
-        "temperature": 0.0,
+    let local_source = aiInputs.local_ai.sourceInput.value;
+    let local_model = aiInputs.local_ai.modelInput.value;
+    let local_temperature = aiInputs.local_ai.temperatureInput.value;
+
+    const isLocalMissing = !local_model || !local_source || !local_temperature;
+    const isCloudeMissing = !cloude_api || !cloude_model || !cloude_service || !cloude_temperature;
+    if (isCloudeMissing && isLocalMissing) return false;
+
+    const determined_mode = isCloudeMissing ? "local_ai" : "cloud_ai";
+
+    const aiObject: Ai = {
+        "active_mode": "cloud_ai",
+        "local_ai": {
+            "source": local_source || "",
+            "model": local_model || "",
+            "temperature": Number(local_temperature) || 0.0,
+        },
+        "cloud_ai": {
+            "api": cloude_api || "",
+            "model": cloude_model || "",
+            "service": cloude_service || "",
+            "temperature": Number(cloude_temperature) || 0.0,
+        }
     }
 
     return aiObject
@@ -152,14 +268,16 @@ const getSubmits = (currentStage: string, nextStage: string): boolean => {
             userSettings.font = font.toString();
             return true;
         case "5":
+            console.log("buton tetiklendi");
             const aiObject = getAI();
-            if(aiObject === false) {
+            console.log("butondan gelen cevap:", aiObject);
+            if (aiObject === false) {
                 return false;
             }
             if (aiObject instanceof Object) {
-                userSettings.ai.api = aiObject.api;
-                userSettings.ai.model = aiObject.model;
-                userSettings.ai.service = aiObject.service;
+                userSettings.ai.cloud_ai.api = aiObject.cloud_ai.api;
+                userSettings.ai.cloud_ai.model = aiObject.cloud_ai.model;
+                userSettings.ai.cloud_ai.service = aiObject.cloud_ai.service;
             }
             return true;
         case "6":
@@ -215,7 +333,7 @@ buttons.forEach(button => {
 });
 
 document.addEventListener("keydown", (event) => {
-    if(event.key === "Enter") {
+    if (event.key === "Enter") {
         const target = event.target as HTMLElement;
         if (!target) return;
         const bodyQ = target?.closest(".body-q");
@@ -239,7 +357,7 @@ document.addEventListener("keydown", (event) => {
 })
 
 document.getElementById("submit")?.addEventListener("click", async () => {
-    if (!userSettings.alias || !userSettings.font || !userSettings.theme || !userSettings.ai) return;
+    if (!userSettings.alias || !userSettings.font || !userSettings.theme) return;
     userSettings.onboarding_complete = true;
     const response = await invoke("send_user_data", { data: JSON.stringify(userSettings) });
     if (response === true) {
@@ -249,37 +367,16 @@ document.getElementById("submit")?.addEventListener("click", async () => {
     }
 });
 
+document.querySelectorAll(".terux_temperature_inputs").forEach(element => {
+    element.addEventListener("change", (event) => {
+        const target = event.target as HTMLInputElement;
+        target.value = Number(target.value).toFixed(1);
+    });
+});
+
+
 document.querySelectorAll('input[type="button"]').forEach(element => {
     element.addEventListener("click", () => {
-        const AiapiInput = document.getElementById("aiApiInput") as HTMLInputElement;
-        const AimodelInput = document.getElementById("aiModelInput") as HTMLInputElement;
-        const AiServiceInput = document.getElementById("aiServiceInput") as HTMLInputElement;
-        switch (element.id) {
-            case "gemini":
-                AiapiInput.value = "AIza";
-                AimodelInput.placeholder = "gemini-3.1-flash-lite";
-                AiServiceInput.value = "Gemini";
-                break;
-            case "claude":
-                AiapiInput.value = "sk-ant-";
-                AimodelInput.placeholder = "claude-3-haiku";
-                AiServiceInput.value = "Claude";
-                break;
-            case "groq":
-                AiapiInput.value = "gsk_";
-                AimodelInput.placeholder = "llama-3.1-8b-instant";
-                AiServiceInput.value = "Groq";
-                break;
-            case "deepseek":
-                AiapiInput.value = "sk-";
-                AimodelInput.placeholder = "deepseek-v4-flash";
-                AiServiceInput.value = "DeepSeek";
-                break;
-            case "ollama":
-                AiapiInput.value = "";
-                AiapiInput.placeholder = "http://localhost:port";
-                AimodelInput.placeholder = "Local AI Model Name";
-                AiServiceInput.value = "Ollama";
-        }
+        updateAiInputPresets(element.id);
     });
 });

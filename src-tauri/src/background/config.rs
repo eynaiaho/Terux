@@ -8,12 +8,23 @@ use tauri::{AppHandle, Manager};
 static _PATH_: &str = "terux_config.json";
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Ai {
+pub struct LocalAi {
+    pub source: String,
+    pub model: String,
+    pub temperature: f32
+}
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct CloudAi {
     pub api: String,
     pub model: String,
     pub service: String,
-    pub source: String,
     pub temperature: f32
+}
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct Ai {
+    pub active_mode: String,
+    pub local_ai: LocalAi,
+    pub cloud_ai: CloudAi,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -118,11 +129,9 @@ impl UserConfig {
             theme: String::from(""),
             font: String::from(""),
             ai: Ai {
-                api: String::from(""),
-                model: String::from(""),
-                service: String::from(""),
-                source: String::from(""),
-                temperature: 0.0
+                active_mode: String::from("cloud_ai"),
+                local_ai: LocalAi { source: String::from(""), model: String::from(""), temperature: 0.0 },
+                cloud_ai: CloudAi { api: String::from(""), model: String::from(""), service: String::from(""), temperature: 0.0 },
             },
             telemetry: false,
             onboarding_complete: false,

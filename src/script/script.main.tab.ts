@@ -36,7 +36,6 @@ export const createTabDOM = (title: string, src: string) => {
     tabLogo.appendChild(tabLogoIMG);
     if (tabsDOM) {
         tabsDOM.appendChild(bodyTab);
-        console.log(tabs);
     }
 
     tabsIndex++;

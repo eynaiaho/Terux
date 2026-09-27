@@ -88,6 +88,23 @@ addListener("click", "#exitSettings", (event) => { // CLOSE SETTINGS
 
 // Settings
 
+addListener("click", ".terux_settings_menu_button", (event) => {
+    const id = (event.target as HTMLButtonElement).id;
+    const targetButton = id.split("_")[1];
+    if(targetButton === "Ci") {
+        divSettingsMenu.buttons.ai_menus.cloud_ai.setAttribute("active", "");
+        divSettingsMenu.buttons.ai_menus.local_ai.removeAttribute("active");
+    } else if(targetButton === "La") {
+        divSettingsMenu.buttons.ai_menus.local_ai.setAttribute("active", "");
+        divSettingsMenu.buttons.ai_menus.cloud_ai.removeAttribute("active");
+    }
+}, true);
+
+addListener("change", ".terux_temperature_inputs", (event) => {
+    const target = event.target as HTMLInputElement;
+    target.value = Number(target.value).toFixed(1);
+}, true);
+
 addListener("click", "#settingsUser", (event) => { // OPEN USERS SETTINGS
     changeMenu(divSettingsMenu.divs.users_div, divSettingsMenu.divs);
 });
@@ -102,7 +119,7 @@ addListener("click", "#settingsSubmit", async (event) => {
     if (!divSettingsMenu.buttons.save_button.hasAttribute("active")) return;
     const data = settingsToObject();
     if (JSON.stringify(data) === JSON.stringify(GLOBAL_USER_CONFIG)) {
-        divSettingsMenu.buttons.save_button.removeAttribute("active");;
+        divSettingsMenu.buttons.save_button.removeAttribute("active");
         return;
     };
     await saveSettings(data);
@@ -122,6 +139,16 @@ addListener("click", ".settings-font-button", (event) => {
 addListener("click", ".settings-theme-button", (event) => {
     const targetButton = event.target as HTMLButtonElement;
     const activeElement = findElement(".settings-theme-button[active-currently]");
+    if (activeElement) {
+        activeElement.removeAttribute("active-currently");
+    }
+    targetButton.setAttribute("active-currently", "");
+    divSettingsMenu.buttons.save_button.setAttribute("active", "");
+}, true);
+
+addListener("click", ".settings-ai-button", (event) => {
+    const targetButton = event.target as HTMLButtonElement;
+    const activeElement = findElement(".settings-ai-button[active-currently]");
     if (activeElement) {
         activeElement.removeAttribute("active-currently");
     }
