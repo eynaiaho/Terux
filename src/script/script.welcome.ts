@@ -268,9 +268,7 @@ const getSubmits = (currentStage: string, nextStage: string): boolean => {
             userSettings.font = font.toString();
             return true;
         case "5":
-            console.log("buton tetiklendi");
             const aiObject = getAI();
-            console.log("butondan gelen cevap:", aiObject);
             if (aiObject === false) {
                 return false;
             }
