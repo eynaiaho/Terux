@@ -32,6 +32,7 @@ document.fonts.ready.then(async () => {
         await declarePanic("Terminal not found, will you close the terminal?", true);
         return;
     }
+    
     term.open(terminal)
 
     try {
@@ -41,11 +42,18 @@ document.fonts.ready.then(async () => {
         console.warn("Ekran kartı WebGL desteklemiyor, alternatif yöntem çalıştırılacak", e);
     }
 
-    fitAddon.fit();
+    requestAnimationFrame(() => {
+        const renderDisposable = term.onRender(async () => {
+            if (term.element && term.element.clientWidth > 0) {
+                fitAddon.fit();
+                await invoke('resize_pty', {
+                    cols: term.cols,
+                    rows: term.rows
+                });
 
-    await invoke('resize_pty', {
-        cols: term.cols,
-        rows: term.rows
+                renderDisposable.dispose();
+            }
+        });
     });
 });
 
