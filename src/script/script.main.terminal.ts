@@ -74,24 +74,37 @@ term.onKey(async (event) => {
     }
 })
 
+let currentInput = "";
+
 term.onData(async (data) => {
     if (isPlaceholderVisible) {
         clearPlaceholder();
     }
-    if (data === "\r") {
-        const buffer = term.buffer.active;
-        const currentLine = buffer.getLine(buffer.cursorY + buffer.baseY)?.translateToString(true).trim();
-        const commandIndex = currentLine?.indexOf("!teruxai");
-        if (commandIndex === undefined) return;
-        if (commandIndex !== -1) {
-            const question = currentLine?.substring((commandIndex || 0) + 8).trim();
+    if (data === "\u007F" || data === "\b") {
+        currentInput = currentInput.slice(0, -1);
+        await invoke("inject_str", { data: data });
+        return;
+    }
+    const isControlChar = data.charCodeAt(0) < 32 && data !== "\r";
 
-            if (!question) return;
+    if (!isControlChar && data !== "\r") {
+        currentInput += data;
+    }
+    if (data === "\r") {
+        const trimmedInput = currentInput.trim();
+        if (currentInput.startsWith("!teruxai")) {
+            const question = currentInput.replace("!teruxai", "").trim();
+
+            if (!question) {
+                currentInput = "";
+                return;
+            }
 
             sendToAI(term, question);
-
+            currentInput = "";
             return;
         }
+        currentInput = "";
     }
     await invoke("inject_str", { data: data });
 });
