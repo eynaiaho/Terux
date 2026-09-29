@@ -32,8 +32,10 @@ document.fonts.ready.then(async () => {
         await declarePanic("Terminal not found, will you close the terminal?", true);
         return;
     }
-    
-    term.open(terminal)
+
+    term.open(terminal);
+    term.focus();
+    term.write("\b");
 
     try {
         const webglAddon = new WebglAddon();
@@ -88,13 +90,13 @@ term.onData(async (data) => {
     if (isPlaceholderVisible) {
         clearPlaceholder();
     }
+    
     if (data === "\u007F" || data === "\b") {
         currentInput = currentInput.slice(0, -1);
         await invoke("inject_str", { data: data });
         return;
     }
     const isControlChar = data.charCodeAt(0) < 32 && data !== "\r";
-
     if (!isControlChar && data !== "\r") {
         currentInput += data;
     }
@@ -156,7 +158,6 @@ const clearPlaceholder = () => {
 
 window.onResized(async () => {
     fitAddon.fit();
-
     await invoke('resize_pty', {
         cols: term.cols,
         rows: term.rows
