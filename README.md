@@ -151,3 +151,7 @@ MIT
 ## Disclaimer
 
 Terux executes commands in a real terminal session. Always review what the AI suggests before running it. The author is not responsible for any unintended effects of executed commands.
+
+## Author
+
+**Ahmet Cihan** — [@eynaiaho](https://github.com/eynaiaho)
