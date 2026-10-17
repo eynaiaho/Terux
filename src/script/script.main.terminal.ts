@@ -90,7 +90,7 @@ term.onData(async (data) => {
     if (isPlaceholderVisible) {
         clearPlaceholder();
     }
-    
+
     if (data === "\u007F" || data === "\b") {
         currentInput = currentInput.slice(0, -1);
         await invoke("inject_str", { data: data });
@@ -125,6 +125,23 @@ term.attachCustomKeyEventHandler((e: KeyboardEvent) => {
         return false;
     }
     return true;
+});
+
+listen("terminal_closed", (data) => {
+    const payload = data?.payload;
+    console.log(payload);
+    if (typeof payload === "string") {
+        const payloadSplit = payload.split("____");
+        const type = payloadSplit[0] as string;
+        const message = payloadSplit[1] as string;
+        if (type === "ERR") { // HATA ILE SONUÇLANMIŞ
+            term.clear();
+            term.write(message);
+        } else {
+            term.clear();
+            term.write("terminal kapatıldı");
+        }
+    }
 });
 
 listen("bc-terminal-data", (data) => {

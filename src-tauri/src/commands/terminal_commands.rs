@@ -44,16 +44,21 @@ pub async fn ask_ai(state: State<'_, AppData>, data: String) -> Result<String, S
 
 #[command]
 pub async fn resize_pty(state: State<'_, AppData>, cols: u16, rows: u16) -> Result<String, String> {
+    println!("Gönderildi");
     let terminal_config_arc = state.terminal_config.clone();
     let terminal_config = terminal_config_arc.lock().await;
     let terminal_config_master_arc = terminal_config.terminal.clone();
     let mut terminal_config_master = terminal_config_master_arc.lock().await;
     if let Some(ref mut terminal) = *terminal_config_master {
-        let _ = terminal.resize(PtySize {
-            rows: rows,
-            cols: cols,
+        println!("bulundu");
+        match terminal.resize(PtySize {
+            rows,
+            cols,
             ..Default::default()
-        });
+        }) {
+            Ok(()) => println!("PTY resize başarılı"),
+            Err(error) => println!("PTY resize hatası: {error:?}"),
+        }
     }
     Ok("slm".to_string())
 }

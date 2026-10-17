@@ -91,7 +91,7 @@ pub async fn start_terminal(
     // cmd.env("PROMPT", format!("Terux$${alias} $P$G")); // CMD.EXE
     // cmd.args(&["-NoProfile", "-NoExit", "-Command", &prompt_script]); // POWERSHELL
 
-    let child = pair.slave.spawn_command(cmd).unwrap();
+    let mut child = pair.slave.spawn_command(cmd).unwrap();
 
     let mut reader = pair.master.try_clone_reader().unwrap();
     let mut writer = pair.master.take_writer().unwrap();
@@ -113,6 +113,35 @@ pub async fn start_terminal(
         *terminal_config_pid = Some(process_id);
     }
 
+    let app_handle = app.clone();
+
+    tokio::task::spawn(async move {
+        let result = tokio::task::spawn_blocking(move || child.wait()).await;
+        match result {
+            Ok(Ok(_status)) => {
+                println!("OK");
+
+                let terminal_config_arc = app_handle.state::<AppData>().terminal_config.clone();
+                let terminal_config = terminal_config_arc.lock().await;
+
+                let terminal_config_master_arc = terminal_config.terminal.clone();
+                let mut terminal_config_master = terminal_config_master_arc.lock().await;
+
+                let terminal_config_pid_arc = terminal_config.pid.clone();
+                let mut terminal_config_pid = terminal_config_pid_arc.lock().await;
+
+                *terminal_config_master = None;
+                *terminal_config_pid = None;
+            }
+            Ok(Err(error)) => {
+                println!("{:?}", error);
+            }
+            Err(error) => {
+                println!("{:?}", error);
+            }
+        }
+    });
+
     let mut reader_task = tokio::task::spawn_blocking(move || {
         let mut buffer = [0u8; 4096];
         let mut path_tracker = PathTracker::new();
@@ -121,10 +150,23 @@ pub async fn start_terminal(
         let mut current_path = path_tracker.current_path.clone();
 
         let mut _stdout = std::io::stdout();
+
         loop {
+            println!("BEFORE READ");
             match reader.read(&mut buffer) {
-                Ok(0) => break,
+                Ok(0) => {
+                    println!("OK 0");
+                    let _ = app.emit("terminal_closed", "NORMAL____user abort");
+                    break;
+                }
                 Ok(n) => {
+                    let hex_string: String = buffer[..n.min(64)]
+                        .iter()
+                        .map(|b| format!("{:02X}", b))
+                        .collect::<Vec<String>>()
+                        .join(" ");
+
+                    println!("READER DATA: {}", hex_string);
                     for &b in &buffer[..n] {
                         path_tracker.process_byte(b);
                         error_tracker.process_byte(b);
@@ -146,8 +188,14 @@ pub async fn start_terminal(
                     let string_data = String::from_utf8_lossy(&buffer[..n]).to_string();
                     let _ = app.emit("bc-terminal-data", string_data);
                 }
-                Err(_) => break,
+                Err(error) => {
+                    println!("ERR ERROR");
+                    let error_message = format!("{}____{}", "ERR", error.to_string());
+                    let _ = app.emit("terminal_closed", error_message);
+                    break;
+                }
             }
+            println!("AFTER READ");
         }
     });
 
